@@ -16,6 +16,26 @@ ui = shinyUI(
                                       .tabbable > .nav > li {float: left;width:25%; text-align: center;}
                                       .navbar-default .navbar-nav > li > a[data-value='home'] {float:right;}
                                       
+                                      .box {
+                                      background: white;
+                                      margin: auto;
+                                      margin-top: 5%;
+                                      padding: 20px 50px;
+                                      box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+                                      transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+                                      }
+                                      
+                                      .box:hover {
+                                      border-top-left-radius: 10px;
+                                      border-bottom-left-radius: 10px;
+                                      animation-name: example;
+                                      animation-duration: 0.25s;
+                                      border-left: 8px solid darkblue;
+                                      box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+                                      }
+                                      
+                                      
+                                      
                                       ")),
                       tags$head(tags$script(HTML('
                                                  var fakeClick = function(tabName) {
@@ -43,11 +63,11 @@ ui = shinyUI(
                                   tabPanel("Físicos")),
                       sidebarLayout(
                         sidebarPanel(width = 2,
-                          selectInput("vara",'Vara',choices = c("a","b")),
-                          selectInput("municipios","Municípios",choices=c("c")),
-                          selectInput("tribunal","Tribunal",choices = c("d")),
-                          dateInput("date", "Data", value = "2012-02-29",
-                                    datesdisabled = c("2012-03-01", "2012-03-02"))
+                                     selectInput("vara",'Vara',choices = c("a","b")),
+                                     selectInput("municipios","Municípios",choices=c("c")),
+                                     selectInput("tribunal","Tribunal",choices = c("d")),
+                                     dateInput("date", "Data", value = "2012-02-29",
+                                               datesdisabled = c("2012-03-01", "2012-03-02"))
                         ),
                         mainPanel())),
              ###########################################################################              
@@ -58,21 +78,21 @@ ui = shinyUI(
                                   tabPanel("Juizado Especial")),
                       sidebarLayout(
                         sidebarPanel(width = 2,
-                          selectInput("vara",'Vara',choices = c("a","b")),
-                          selectInput("municipios","Municípios",choices=c("c")),
-                          selectInput("tribunal","Tribunal",choices = c("d")),
-                          dateInput("date", "Data", value = "2012-02-29",
-                                    datesdisabled = c("2012-03-01", "2012-03-02"))
+                                     selectInput("vara",'Vara',choices = c("a","b")),
+                                     selectInput("municipios","Municípios",choices=c("c")),
+                                     selectInput("tribunal","Tribunal",choices = c("d")),
+                                     dateInput("date", "Data", value = "2012-02-29",
+                                               datesdisabled = c("2012-03-01", "2012-03-02"))
                         ),
                         mainPanel())),
              ##########################################################################
              tabPanel("Acesso à Justiça",  sidebarLayout(
                sidebarPanel(width = 2,
-                 selectInput("vara",'Vara',choices = c("a","b")),
-                 selectInput("municipios","Municípios",choices=c("c")),
-                 selectInput("tribunal","Tribunal",choices = c("d")),
-                 dateInput("date", "Data", value = "2012-02-29",
-                           datesdisabled = c("2012-03-01", "2012-03-02"))
+                            selectInput("vara",'Vara',choices = c("a","b")),
+                            selectInput("municipios","Municípios",choices=c("c")),
+                            selectInput("tribunal","Tribunal",choices = c("d")),
+                            dateInput("date", "Data", value = "2012-02-29",
+                                      datesdisabled = c("2012-03-01", "2012-03-02"))
                ),
                mainPanel())),
              #########################################################################
@@ -81,7 +101,7 @@ ui = shinyUI(
                                   tabPanel("2º grau"),
                                   tabPanel("Turma Recursal"),
                                   tabPanel("Juizado Especial")),
-                        sidebarLayout(
+                      sidebarLayout(
                         sidebarPanel(width = 2,
                                      selectInput("vara",'Vara',choices = c("a","b")),
                                      selectInput("municipios","Municípios",choices=c("c")),
@@ -97,9 +117,8 @@ ui = shinyUI(
              )
              )
                       )
-
+  
                       )
-
 
 server = function(input, output, session){}
 shinyApp(ui, server)

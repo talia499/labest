@@ -40,6 +40,7 @@ ui <- shinyUI(
                                             
                                             .tabs-above > .nav > li[class=active] > a {background-color: darkcyan;color:#FFF;}
                                             .tabbable > .nav > li >a{background-color: darkcyan; color:white;}
+                                            .tabbable > .nav > li[class=active] > a {background-color: #002f54;;color:white;}
                                             .tabbable > .nav > li {float: left;width:25%; text-align: center;}
                                             .navbar-default .navbar-nav > li > a[data-value='home'] {float:right;}
                                             }

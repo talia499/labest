@@ -121,9 +121,9 @@ ui <- shinyUI(
                                                  style="width:173%;")),
                               tabPanel("Objetivos",
                                        mainPanel(strong(p("Este é um projeto da equipe de Justiça e Números da 
-                                                   disciplina Laboratório em Estatística, do Departamento 
-                                                   de Estatística da Universidade de Brasília (UnB) com 
-                                                   o Conselho Nacional de Justiça (CNJ) com os objetivos:")),br(),
+                                                          disciplina Laboratório em Estatística, do Departamento 
+                                                          de Estatística da Universidade de Brasília (UnB) com 
+                                                          o Conselho Nacional de Justiça (CNJ) com os objetivos:")),br(),
                                                  p("Tornar o acesso aos dados do módulo de Produtividade Mensal do 
                                                    CNJ mais acessível, criando novos mecanismos de disponibilização 
                                                    dos dados e consequentemente comparação e avaliação da produtividade 
@@ -134,8 +134,8 @@ ui <- shinyUI(
                               "Infromação",
                               tabPanel("Variáveis"),
                               tabPanel("Referencias",
-                                       mainPanel(p("Base de Dados: Justiça e Números"),
-                                                 p("Código no GitHub: ",
+                                       mainPanel(p(strong("Base de Dados:")," Justiça e Números"),br(),br(),
+                                                 p(strong("Código no GitHub: "),
                                                    a(href = "https://github.com/talia499/labest",
                                                      target ="_blank","https://github.com/talia499/labest")),
                                                  style="width:173%;"
@@ -159,7 +159,7 @@ ui <- shinyUI(
                                        ))
                                        ),style="width: 650px;position:relative; left:195px;bottom:-15px;
                        text-align: justify;")
-                            ),
+                              ),
              
              tabPanel("Insumos",tags$style(type="text/css",
                                            ".shiny-output-error { visibility: hidden; }",

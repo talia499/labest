@@ -42,24 +42,7 @@ ui <- shinyUI(
                                       .tabbable > .nav > li >a{background-color: red; color:white;}
                                       .tabbable > .nav > li {float: left;width:25%; text-align: center;}
                                       .navbar-default .navbar-nav > li > a[data-value='home'] {float:right;}
-                                    
-                                     # .box {
-                                     # background: white;
-                                     # margin: auto;
-                                     # margin-top: 5%;
-                                     # padding: 20px 50px;
-                                     # box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-                                     # transition: all 0.3s cubic-bezier(.25,.8,.25,1);
-                                     # }
-                                     # 
-                                     # .box:hover {
-                                     # border-top-left-radius: 10px;
-                                     # border-bottom-left-radius: 10px;
-                                     # animation-name: example;
-                                     # animation-duration: 0.25s;
-                                     # border-left: 8px solid darkblue;
-                                     # box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
-                                     # }
+                                       }
                                       "))
                             ,
                             tags$script(HTML('var fakeClick = function(tabName) {

@@ -34,15 +34,15 @@ ui <- shinyUI(
   navbarPage("CNJ",tabPanel("Home",
                             tags$style(HTML("
                                       .navbar { background-color: #002f54;} #barra
-                                      .navbar-default .navbar-nav > li > a {color:white; }
-                                      .navbar-default .navbar-nav > .active > a,
-                                      .navbar-default .navbar-nav > .active > a:focus,
-                                      
-                                      .tabs-above > .nav > li[class=active] > a {background-color: darkcyan;color:#FFF;} ##1A8E88 #cor abas e letras
-                                      .tabbable > .nav > li >a{background-color: red; color:white;}
-                                      .tabbable > .nav > li {float: left;width:25%; text-align: center;}
-                                      .navbar-default .navbar-nav > li > a[data-value='home'] {float:right;}
-                                       }
+                                            .navbar-default .navbar-nav > li > a {color:white; }
+                                            .navbar-default .navbar-nav > .active > a,
+                                            .navbar-default .navbar-nav > .active > a:focus,
+                                            
+                                            .tabs-above > .nav > li[class=active] > a {background-color: darkcyan;color:#FFF;}
+                                            .tabbable > .nav > li >a{background-color: darkcyan; color:white;}
+                                            .tabbable > .nav > li {float: left;width:25%; text-align: center;}
+                                            .navbar-default .navbar-nav > li > a[data-value='home'] {float:right;}
+                                            }
                                       "))
                             ,
                             tags$script(HTML('var fakeClick = function(tabName) {

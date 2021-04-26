@@ -278,7 +278,7 @@ server <- function(input, output,session) {
   observeEvent(c(input$jus1, input$tribunal1),{
     updateSelectInput(session,'uf1',
                       choices=unique(casos$uf_sede[casos$justica %in% input$jus1 &
-                                                     casos$sigla %in% input$tribunal1])
+                                                        casos$sigla %in% input$tribunal1])
     )
   })
   #
@@ -290,7 +290,7 @@ server <- function(input, output,session) {
   observeEvent(c(input$jus2, input$tribunal2),{
     updateSelectInput(session,'uf2',
                       choices=unique(produtividade$uf_sede[produtividade$justica %in% input$jus2 &
-                                                             produtividade$sigla %in% input$tribunal2])
+                                                        produtividade$sigla %in% input$tribunal2])
     )
   })
   #
@@ -344,7 +344,7 @@ server <- function(input, output,session) {
                 stat = "identity",colour="red") + 
       geom_bar(mapping = aes(x =as.numeric(ano),y=receitas/1000000,fill="Receitas"),stat="identity")+
       scale_x_continuous( breaks=c(209,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019))+
-      labs(x="Ano",y="Total(em milhões)",fill=" ")+
+      labs(x="Ano",y="Total(mi)",fill=" ")+
       scale_fill_manual(values=c("Receitas"="blue",
                                  "Despesas"="red"))+
       
@@ -427,7 +427,9 @@ server <- function(input, output,session) {
                        data = react6(), size=4, show.legend = F, nudge_x = 1) +
       theme(axis.text = element_blank(),
             axis.ticks = element_blank(),
-            panel.grid  = element_blank())
+            panel.grid  = element_blank())+
+      scale_fill_discrete(labels = c("Benefícios", "Estagiários", "Pessoal e Encargos", "Terceirizados"))
+      
     
   })
   react7=reactive({
@@ -443,8 +445,14 @@ server <- function(input, output,session) {
   })
   
   output$ft2=renderPlot({
-    ggplot(react7())+geom_col(aes(x=factor(trabalho),y=count))
-    
+    ggplot(react7())+geom_col(aes(x=factor(trabalho),y=count, fill=factor(trabalho)))+
+      coord_flip()+
+      scale_x_discrete("Cargos", limits = c("cc","tfc","mag","ts"),
+                       labels = c("Cargos em Comissão", "Magistrados", "Funções Comissionadas", "Total de Servidores"))+ 
+      labs(y="Total")+
+      ggtitle("Servidores segundo cargo")+
+        theme(legend.position = "none")
+      #theme(rect = element_rect(fill = "transparent")) # all rectangles
   })
   
   output$ft3=renderSunburst({
@@ -461,85 +469,97 @@ server <- function(input, output,session) {
     d7=data.frame(v1=c(paste0("Cargos Ocupados","-",d7$cargo[1:3]),
                        paste0("Cargos Vagos","-",d7$cargo[4:6])),
                   v2=d7$count)
-    sunburst(d7)
+   sunburst(d7)
     
-  })
-  react9=reactive({
-    d8=despesas%>%
-      filter(justica %in% input$jus,sigla %in% input$tribunal,uf_sede %in% input$uf,
-             ano %in% input$ano)%>%
-      select(ts,tvefet,mag,magv)%>%
-      mutate_at(vars(ends_with("_id")), funs(as.numeric(as.character(.))))
-    d8= rownames_to_column(data.frame(count=t(d8)), "cargo")
-    d8$s=c("servidor","servidor","magristrado","magristrado")
-    d8
-  })
-  
-  output$ft4=renderPlot({
-    ggplot(react9())+geom_col(aes(x=cargo,y=count,
-                                  fill=factor(s)),
-                              position = "dodge")+
-      labs(fill="",y=" Quantidade",x="")+
-      theme(legend.position="bottom")+labs(colour=" ")
-  })
-  
-  
-  output$ft5=renderPlot({
-    d9=despesas%>%
-      filter(justica %in% input$jus,sigla %in% input$tribunal,uf_sede %in% input$uf,
-             ano %in% input$ano)%>%
-      select(tfauxc, tfauxe, tfauxjl, tfauxt)%>%
-      mutate_at(vars(ends_with("_id")), funs(as.numeric(as.character(.))))
-    d9= rownames_to_column(data.frame(count=t(d9)), "auxiliar")%>%
-      mutate(count=as.numeric(count))
-    
-    d9$fraction <- d9$count / sum(d9$count)
-    d9$ymax <- cumsum(d9$fraction)
-    d9$ymin <- c(0, head(d9$ymax, n=-1))
-    d9$labelPosition <- (d9$ymax + d9$ymin) / 2
-    d9$label <- paste0(d9$auxiliar, "\n value: ", d9$count)
-    ggplot(d9, aes(ymax=ymax, ymin=ymin, xmax=4, xmin=3, fill=auxiliar)) +
-      geom_rect() +
-      coord_polar(theta="y") +
-      xlim(c(2, 4)) +
-      theme(legend.text = element_text(colour="blue", size=10, 
-                                       face="bold"))+
-      scale_fill_manual(labels = c(paste0(d9$auxiliar,": ",d9$count)),
-                        values=c("red","green","blue","yellow"))+
-      labs(fill=" ")+
-      theme_void()
-  })
-  #############################################################################
+})
+react9=reactive({
+  d8=despesas%>%
+    filter(justica %in% input$jus,sigla %in% input$tribunal,uf_sede %in% input$uf,
+           ano %in% input$ano)%>%
+    select(ts,tvefet,mag,magv)%>%
+    mutate_at(vars(ends_with("_id")), funs(as.numeric(as.character(.))))
+   d8= rownames_to_column(data.frame(count=t(d8)), "cargo")
+   d8$s=c("servidor","servidor","magristrado","magristrado")
+   d8
+ })
+ 
+output$ft4=renderPlot({
+  ggplot(react9())+geom_col(aes(x=cargo,y=count,
+                                fill=factor(s)),
+                            position = "dodge")+
+    labs(fill="",y=" Quantidade",x="")+
+    ggtitle("Cargos Ocupados e Vagos segundo cargo")+
+    theme(legend.position="bottom")+labs(colour=" ")+
+    scale_fill_discrete(labels = c("Magistrados","Servidores"))+
+    scale_x_discrete("Cargos", limits = c("mag","magv","ts","tvefet"),
+                     labels = c("Ocupados", "Vagos", "Ocupados", "Vagos"))
+
+})
+
+
+output$ft5=renderPlot({
+  d9=despesas%>%
+    filter(justica %in% input$jus,sigla %in% input$tribunal,uf_sede %in% input$uf,
+           ano %in% input$ano)%>%
+    select(tfauxc, tfauxe, tfauxjl, tfauxt)%>%
+    mutate_at(vars(ends_with("_id")), funs(as.numeric(as.character(.))))
+  d9= rownames_to_column(data.frame(count=t(d9)), "auxiliar")%>%
+    mutate(count=as.numeric(count))
+   
+  d9$fraction <- d9$count / sum(d9$count)
+  d9$ymax <- cumsum(d9$fraction)
+  d9$ymin <- c(0, head(d9$ymax, n=-1))
+  d9$labelPosition <- (d9$ymax + d9$ymin) / 2
+  d9$label <- paste0(d9$auxiliar, "\n value: ", d9$count)
+  ggplot(d9, aes(ymax=ymax, ymin=ymin, xmax=4, xmin=3, fill=auxiliar)) +
+    geom_rect() +
+    coord_polar(theta="y") +
+    xlim(c(2, 4)) +
+    theme(legend.text = element_text(colour="blue", size=10, 
+                                     face="bold"))+
+    scale_fill_manual(labels = c(paste0(d9$auxiliar,": ",d9$count)),
+                      values=c("red","green","blue","yellow"))+
+    labs(fill=" ")+
+    theme_void()
+})
+#############################################################################
   
   react11=reactive({
-    c1=casos%>%
-      filter(justica %in% input$jus1,sigla %in% input$tribunal1,uf_sede %in% input$uf1)%>%
-      select( ano,cn,tbaix)%>%
-      mutate(cn=as.numeric(cn),
-             tbaix=as.numeric(tbaix))
-    c1
-  })
-  output$l1=renderPlot({
-    ggplot(react11())+geom_line(aes(x=ano,y=cn,colour="Casos Novos"))+
-      geom_line(aes(x=ano,y=tbaix,colour="Casos Baixados"))+
-      scale_colour_manual(values=c("Casos Novos"="red",
-                                   "Casos Baixados"="blue"))+
-      labs(colour="")+theme(legend.position="bottom")
-    
-  })
-  react12=reactive({
-    c2=casos%>%
-      filter(justica %in% input$jus1,sigla %in% input$tribunal1,uf_sede %in% input$uf1,
-             ano %in% input$ano1)%>%
-      select(cnncrim,cnelet,cncrim)%>%
-      mutate_if(is.character, as.numeric)
-    
-    c2=rownames_to_column(data.frame(count=t(c2)), "cn")
-    c2
-  })
-  output$l2=renderPlot({
-    ggplot(react12())+geom_col(aes(x=cn,y=count))
-  })
+   c1=casos%>%
+     filter(justica %in% input$jus1,sigla %in% input$tribunal1,uf_sede %in% input$uf1)%>%
+     select( ano,cn,tbaix)%>%
+     mutate(cn=as.numeric(cn),
+            tbaix=as.numeric(tbaix))
+   c1
+})
+ output$l1=renderPlot({
+   ggplot(react11())+geom_line(aes(x=ano,y=cn,colour="Casos Novos"))+
+     geom_line(aes(x=ano,y=tbaix,colour="Casos Baixados"))+
+     scale_colour_manual(values=c("Casos Novos"="red",
+                                  "Casos Baixados"="blue"))+
+     labs(x="Ano",y="Total",colour="")+theme(legend.position="bottom")+
+     ggtitle("Quantidade de Casos Novos e Baixados segundo ano")
+   
+ })
+ react12=reactive({
+   c2=casos%>%
+     filter(justica %in% input$jus1,sigla %in% input$tribunal1,uf_sede %in% input$uf1,
+            ano %in% input$ano1)%>%
+     select(cnncrim,cnelet,cncrim)%>%
+     mutate_if(is.character, as.numeric)
+   
+   c2=rownames_to_column(data.frame(count=t(c2)), "cn")
+   c2
+ })
+ output$l2=renderPlot({
+   ggplot(react12())+geom_col(aes(x=cn,y=count, fill=c("#ffae00","#2e8b57","#d174a8")))+
+     coord_flip()+
+     scale_x_discrete("Casos Novos", limits = c("cncrim","cnelet","cnncrim"),
+                      labels = c("Criminais", "Eletrônicos", "Não-Criminais"))+ 
+     labs(y="Total")+
+     ggtitle("Casos Novos por categoria")+
+     theme(legend.position = "none")
+ })
   ###################################################################
   react13=reactive({
     p1=produtividade%>%
@@ -564,84 +584,84 @@ server <- function(input, output,session) {
   })
   
   
-  #################################################
-  output$aj1=renderLeaflet({
-    a1=assistencia%>%filter(ano %in% input$ano4)%>%mutate(jg=as.numeric(gsub(",",".",jg)))%>%
-      group_by(uf_sede)%>%
-      summarise(jg=sum(jg,na.rm =T))%>%filter(uf_sede!="BR")
-    
-    a1[28,]=a1[7,]
-    a1=a1[-7,]
-    
-    states2<-cbind(states,a1)
-    bins <- c(0, 100000,200000,500000,1000000,2000000,5000000, Inf)
-    pal <- colorBin("PuBu", domain =states2$jg, bins = bins)
-    labels <- sprintf(
-      "<strong>%s</strong><br/>%s Assistência Judiciária Gratuita </sup>",
-      states$name, states2$jg
-    ) %>% lapply(htmltools::HTML)
-    
-    leaflet(states) %>%
-      setView(-47, -15.8, 3) %>%
-      addProviderTiles("Stamen.Watercolor", options = providerTileOptions(
-        id = "mapbox.light",
-        accessToken = Sys.getenv('MAPBOX_ACCESS_TOKEN'))) %>%
-      addPolygons(
-        fillColor = ~pal(states2$jg),
-        weight = 2,
-        opacity = 1,
-        color = "white",
-        dashArray = "3",
+#################################################
+output$aj1=renderLeaflet({
+  a1=assistencia%>%filter(ano %in% input$ano4)%>%mutate(jg=as.numeric(gsub(",",".",jg)))%>%
+    group_by(uf_sede)%>%
+    summarise(jg=sum(jg,na.rm =T))%>%filter(uf_sede!="BR")
+  
+  a1[28,]=a1[7,]
+  a1=a1[-7,]
+  
+  states2<-cbind(states,a1)
+  bins <- c(0, 100000,200000,500000,1000000,2000000,5000000, Inf)
+  pal <- colorBin("PuBu", domain =states2$jg, bins = bins)
+  labels <- sprintf(
+    "<strong>%s</strong><br/>%s Assistência Judiciária Gratuita </sup>",
+    states$name, states2$jg
+  ) %>% lapply(htmltools::HTML)
+  
+  leaflet(states) %>%
+    setView(-47, -15.8, 3) %>%
+    addProviderTiles("Stamen.Watercolor", options = providerTileOptions(
+      id = "mapbox.light",
+      accessToken = Sys.getenv('MAPBOX_ACCESS_TOKEN'))) %>%
+    addPolygons(
+      fillColor = ~pal(states2$jg),
+      weight = 2,
+      opacity = 1,
+      color = "white",
+      dashArray = "3",
+      fillOpacity = 0.7,
+      highlight = highlightOptions(
+        weight = 5,
+        color = "#666",
+        dashArray = "",
         fillOpacity = 0.7,
-        highlight = highlightOptions(
-          weight = 5,
-          color = "#666",
-          dashArray = "",
-          fillOpacity = 0.7,
-          bringToFront = TRUE),
-        label = labels,
-        labelOptions = labelOptions(
-          style = list("font-weight" = "normal", padding = "3px 8px"),
-          textsize = "15px",
-          direction = "auto")) %>%
-      addLegend(pal = pal, values = ~regiao_id, opacity = 0.7, title = NULL,
-                position = "bottomleft")%>%
-      addMeasure(position = "bottomleft")
-    
-  })
-  output$aj2=renderPlotly({
-    a2=assistencia%>%filter(ano %in% input$ano4)%>%
-      select(a1,a2,uf_sede)%>%
-      mutate(a1=as.numeric(gsub(",",".",a1)),
-             a2=as.numeric(gsub(",",".",a2)))%>%
-      group_by(uf_sede)%>%
-      summarise(a1=sum(a1,na.rm =T),
-                a2=sum(a2,na.rm=T))%>%filter(uf_sede!="BR")
-    
-    a2[28,]=a2[7,]
-    a2=a2[-7,]
-    a2<-cbind(states@data[,3:4],a2)
-    a2$regiao_id[a2$regiao_id==1]="sul"
-    a2$regiao_id[a2$regiao_id==2]="sudeste"
-    a2$regiao_id[a2$regiao_id==3]="norte"
-    a2$regiao_id[a2$regiao_id==4]="nordeste"
-    a2$regiao_id[a2$regiao_id==5]="centro oeste"
-    a2=a2%>%group_by(regiao_id)%>%
-      summarise(a1=round(sum(a1,na.rm =T),2),
-                a2=round(sum(a2,na.rm=T),2))
-    
-    
-    plot_ly(type="table",
-            header=list(values=names(a2),  align = c('center', rep('center', ncol(a2))),
-                        line = list(width = 1, color = 'black'),
-                        fill = list(color = "darkblue"),
-                        font = list(family = "Arial", size = 14, color = "white")),
-            cells=list(values=unname(a2),
-                       font = list(family = "Arial", size = 14, color = c("white","black")),
-                       fill = list(color = c("darkblue", '#B0C4DE')))) 
-    
-    
-  })
+        bringToFront = TRUE),
+      label = labels,
+      labelOptions = labelOptions(
+        style = list("font-weight" = "normal", padding = "3px 8px"),
+        textsize = "15px",
+        direction = "auto")) %>%
+    addLegend(pal = pal, values = ~regiao_id, opacity = 0.7, title = NULL,
+              position = "bottomleft")%>%
+    addMeasure(position = "bottomleft")
+  
+})
+output$aj2=renderPlotly({
+  a2=assistencia%>%filter(ano %in% input$ano4)%>%
+    select(a1,a2,uf_sede)%>%
+    mutate(a1=as.numeric(gsub(",",".",a1)),
+           a2=as.numeric(gsub(",",".",a2)))%>%
+    group_by(uf_sede)%>%
+    summarise(a1=sum(a1,na.rm =T),
+              a2=sum(a2,na.rm=T))%>%filter(uf_sede!="BR")
+  
+  a2[28,]=a2[7,]
+  a2=a2[-7,]
+  a2<-cbind(states@data[,3:4],a2)
+  a2$regiao_id[a2$regiao_id==1]="sul"
+  a2$regiao_id[a2$regiao_id==2]="sudeste"
+  a2$regiao_id[a2$regiao_id==3]="norte"
+  a2$regiao_id[a2$regiao_id==4]="nordeste"
+  a2$regiao_id[a2$regiao_id==5]="centro oeste"
+  a2=a2%>%group_by(regiao_id)%>%
+    summarise(a1=round(sum(a1,na.rm =T),2),
+              a2=round(sum(a2,na.rm=T),2))
+  
+  
+  plot_ly(type="table",
+          header=list(values=names(a2),  align = c('center', rep('center', ncol(a2))),
+                      line = list(width = 1, color = 'black'),
+                      fill = list(color = "darkblue"),
+                      font = list(family = "Arial", size = 14, color = "white")),
+          cells=list(values=unname(a2),
+                     font = list(family = "Arial", size = 14, color = c("white","black")),
+                     fill = list(color = c("darkblue", '#B0C4DE')))) 
+  
+  
+ })
 }
 
 shinyApp(ui, server)

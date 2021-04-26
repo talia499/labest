@@ -134,7 +134,7 @@ ui <- shinyUI(
                               "Infromação",
                               tabPanel("Variáveis"),
                               tabPanel("Referencias",
-                                       mainPanel(p("Dados so Justiça e Números"),
+                                       mainPanel(p("Base de Dados: Justiça e Números"),
                                                  p("Código no GitHub: ",
                                                    a(href = "https://github.com/talia499/labest",
                                                      target ="_blank","https://github.com/talia499/labest")),

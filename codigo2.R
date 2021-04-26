@@ -31,7 +31,7 @@ assistencia=dados[,c('uf_abrangida','uf_sede','dsc_tribunal',"justica",'ano',"si
 ##########################################################################################3
 
 ui <- shinyUI(
-  navbarPage("CNJ",tabPanel("Home",
+  navbarPage("CNJ",tabPanel("Home",icon = icon("home", lib =  "glyphicon"),
                             tags$style(HTML("
                                             .navbar { background-color: #002f54;} #barra
                                             .navbar-default .navbar-nav > li > a {color:white; }
@@ -162,7 +162,7 @@ ui <- shinyUI(
                        text-align: justify;")
   ),
   
-  tabPanel("Insumos",tags$style(type="text/css",
+  tabPanel("Insumos",icon=icon("coins"),tags$style(type="text/css",
                                 ".shiny-output-error { visibility: hidden; }",
                                 ".shiny-output-error:before { visibility: hidden; }"),
            inputPanel(
@@ -206,7 +206,7 @@ ui <- shinyUI(
   ),
   
   
-  tabPanel("Litigiosidade",
+  tabPanel("Litigiosidade",icon=icon("balance-scale"),
            tags$style(type="text/css",
                       ".shiny-output-error { visibility: hidden; }",
                       ".shiny-output-error:before { visibility: hidden; }"),
@@ -222,7 +222,7 @@ ui <- shinyUI(
              div(plotOutput("l2"),
                  style="width:650px;")
            )),
-  tabPanel("Produtividade",
+  tabPanel("Produtividade",icon=icon("chart-line"),
            tags$style(type="text/css",
                       ".shiny-output-error { visibility: hidden; }",
                       ".shiny-output-error:before { visibility: hidden; }"),
@@ -242,7 +242,7 @@ ui <- shinyUI(
                                    selectInput("tribunal3","Tribunal",choices = unique(dados$sigla)),
                                    selectInput("uf3","UF",choices = unique(dados$uf_sede)),
                                    selectInput("ano3","Ano",choices = unique(dados$ano)))))),
-  tabPanel("Acesso à Justiça",
+  tabPanel("Acesso à Justiça",icon=icon("globe"),
            tags$style(type="text/css",
                       ".shiny-output-error { visibility: hidden; }",
                       ".shiny-output-error:before { visibility: hidden; }"),

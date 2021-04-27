@@ -10,6 +10,7 @@ library(plotly)
 library(geojsonio)
 library(leaflet)
 library(shinydashboardPlus)
+mycol<- c( "#D94800","#458A00", "#8A8A00", "#005C8A","CC0074")
 states <- geojson_read("https://raw.githubusercontent.com/codeforamerica/click_that_hood/master/public/data/brazil-states.geojson",  what = "sp")
 dados<- read.csv2("C:/Users/gabri/Downloads/JN_25-Ago-2020.csv", header=T)
 dados$sigla=(substr(dados$sigla,1,nchar(dados$sigla)-2))
@@ -33,15 +34,15 @@ assistencia=dados[,c('uf_abrangida','uf_sede','dsc_tribunal',"justica",'ano',"si
 ui <- shinyUI(
   navbarPage("CNJ",tabPanel("Home",icon = icon("home", lib =  "glyphicon"),
                             tags$style(HTML("
-                                            .navbar { background-color: #002f54;} #barra
+                                            .navbar { background-color: #002f54;} 
                                             .navbar-default .navbar-nav > li > a {color:white; }
                                             .navbar-default .navbar-nav > .active > a,
                                             .navbar-default .navbar-nav > .active > a:focus,
                                             
                                             .tabs-above > .nav > li[class=active] > a {background-color: darkcyan;color:#FFF;}
                                             .tabbable > .nav > li >a{background-color: darkcyan; color:white;}
-                                            .tabbable > .nav > li[class=active] > a {background-color: #002f54;;color:white;}
                                             .tabbable > .nav > li {float: left;width:25%; text-align: center;}
+                                            .tabbable > .nav > li[class=active] > a {background-color: #002f54;;color:white;}
                                             .navbar-default .navbar-nav > li > a[data-value='home'] {float:right;}
                                             }
                                             "))
@@ -66,25 +67,25 @@ ui <- shinyUI(
                               carousel(
                                 id = "mycarousel",
                                 carouselItem(
-                                  caption = "Insumos",
+                                  caption = "Item 1",
                                   div(style="text-align: center;background-color: rgba(10,23,55,0.5);",
                                       img(src = "https://www.contabeis.com.br/assets/img/news/22369c50fddc77c69e16c09af2aa470a.jpg?v=",
                                           onclick = "fakeClick('Insumos')",width="750px",height="300px"))
                                 ),
                                 carouselItem(
-                                  caption = "Litigiosidade",
+                                  caption = "Item 2",
                                   div(style="text-align: center;background-color: rgba(10,23,55,0.5);",
                                       img(src = "https://www.viverhoje.org/site/assets/files/1896/leis-direitos_20160822.jpg",
                                           onclick = "fakeClick('Litigiosidade')",width="700px",height="300px"))
                                 ),
                                 carouselItem(
-                                  caption = "Acesso à Justiça",
+                                  caption = "Item 3",
                                   div(style="text-align: center;background-color: rgba(10,23,55,0.5);",
                                       img(src = "https://guimaraes-adv.com/wp-content/uploads/2018/09/25632879542.jpg",
-                                          onclick = "fakeClick('Acesso à Justiça')",width="750px",height="300px"))
+                                          onclick = "fakeClick('Acesso a Justiça')",width="750px",height="300px"))
                                 ),
                                 carouselItem(
-                                  caption = "Produtividade",
+                                  caption = "Item 4",
                                   div(style="text-align: center;background-color: rgba(10,23,55,0.5);",
                                       img(src = "https://cerizze.com/wp-content/uploads/2019/04/o-tempo-e-o-processo.jpg",
                                           onclick = "fakeClick('Produtividade')",width="750px",height="300px"))
@@ -132,9 +133,9 @@ ui <- shinyUI(
                                                  p("Criar uma plataforma que possibilite melhor 
                                                    visualização do cenário do sistema judicial brasileiro."),
                                                  style="width:173%;")),
-                              "Informação",
+                              "Infromação",
                               tabPanel("Variáveis"),
-                              tabPanel("Referências",
+                              tabPanel("Referencias",
                                        mainPanel(p(strong("Base de Dados:")," Justiça e Números"),br(),br(),
                                                  p(strong("Código no GitHub: "),
                                                    a(href = "https://github.com/talia499/labest",
@@ -158,105 +159,105 @@ ui <- shinyUI(
                                          p("Pedro Gabriel Moura"),
                                          p("Talia Alves Xavier")
                                        ))
-                            ),style="width: 650px;position:relative; left:195px;bottom:-15px;
+                                       ),style="width: 650px;position:relative; left:195px;bottom:-15px;
                        text-align: justify;")
-  ),
-  
-  tabPanel("Insumos",icon=icon("coins"),tags$style(type="text/css",
-                                ".shiny-output-error { visibility: hidden; }",
-                                ".shiny-output-error:before { visibility: hidden; }"),
-           inputPanel(
-             selectInput("jus",'Justiça',choices = unique(dados$justica)),
-             selectInput("tribunal","Tribunal",choices = unique(dados$sigla)),
-             selectInput("uf","UF",choices = unique(dados$uf_sede)),
-             selectInput("ano","Ano",choices = unique(dados$ano))
+                              ),
              
-           ),
-           tabsetPanel(tabPanel("Despesas",
-                                mainPanel(
-                                  div(
-                                    plotOutput( "despesa1"),
-                                    style = "width:600px ;position: relative;left: 0px;bottom:-30px;"),
-                                  div(plotOutput("despesa2"),
-                                      style="width:600px ;position: relative;left: 650px;bottom:360px;"),
-                                  div(plotOutput("a2"),
-                                      style="width:700px ;position: relative;left:0px;bottom:350px;")
-                                )),
-                       tabPanel("Força de Trabalho",
-                                mainPanel(
-                                  div(plotOutput("ft1"),
-                                      style = "width:600px ;position: relative;left: 0px;bottom:-30px;"),
-                                  div(plotOutput("ft2"),
-                                      style="width:600px ;position: relative;left: 650px;bottom:360px;"),
-                                  div(box("Cargo magistrado",sunburstOutput("ft3")),
-                                      style="width:700px ;position: relative;left:100px;bottom:350px;"),
-                                  div(plotOutput("ft4"),
-                                      style="width:700px ;position: relative;left:600px;bottom:720px;"),
-                                  div(plotOutput("ft5"),
-                                      style="width:700px ;position: relative;left:0px;bottom:300px;"))
-                       ),
-                       tabPanel("Arrecadação",
-                                mainPanel(
-                                  div(
-                                    plotOutput( "a1"),
-                                    style = "width:600px ;position: relative;left: 0px;bottom:-30px;"),
-                                  div(plotOutput("despesa3"),
-                                      style="width:600px ;position: relative;left: 650px;bottom:360px;")
-                                )))
-  ),
-  
-  
-  tabPanel("Litigiosidade",icon=icon("balance-scale"),
-           tags$style(type="text/css",
-                      ".shiny-output-error { visibility: hidden; }",
-                      ".shiny-output-error:before { visibility: hidden; }"),
-           sidebarPanel(style="width:300px;position: relative;left:0px;bottom:-70px;",
-                        selectInput("jus1",'Justiça',choices = unique(dados$justica)),
-                        selectInput("tribunal1","Tribunal",choices = unique(dados$sigla)),
-                        selectInput("uf1","UF",choices = unique(dados$uf_sede)),
-                        selectInput("ano1","Ano",choices = unique(dados$ano))
+             tabPanel("Insumos",icon=icon("coins"),tags$style(type="text/css",
+                                                              ".shiny-output-error { visibility: hidden; }",
+                                                              ".shiny-output-error:before { visibility: hidden; }"),
+                      inputPanel(
+                        selectInput("jus",'Justiça',choices = unique(dados$justica)),
+                        selectInput("tribunal","Tribunal",choices = unique(dados$sigla)),
+                        selectInput("uf","UF",choices = unique(dados$uf_sede)),
+                        selectInput("ano","Ano",choices = unique(dados$ano))
                         
-           ),mainPanel(
-             div(plotOutput("l1"),
-                 style="width:650px ;"),
-             div(plotOutput("l2"),
-                 style="width:650px;")
-           )),
-  tabPanel("Produtividade",icon=icon("chart-line"),
-           tags$style(type="text/css",
-                      ".shiny-output-error { visibility: hidden; }",
-                      ".shiny-output-error:before { visibility: hidden; }"),
-           tabsetPanel(
-             tabPanel("Indicadores",
+                      ),
+                      tabsetPanel(tabPanel("Despesas",
+                                           mainPanel(
+                                             div(
+                                               plotOutput( "despesa1"),
+                                               style = "width:600px ;position: relative;left: 0px;bottom:-30px;"),
+                                             div(plotOutput("despesa2"),
+                                                 style="width:600px ;position: relative;left: 650px;bottom:360px;"),
+                                             div(plotOutput("a2"),
+                                                 style="width:700px ;position: relative;left:0px;bottom:350px;")
+                                           )),
+                                  tabPanel("Força de Trabalho",
+                                           mainPanel(
+                                             div(plotOutput("ft1"),
+                                                 style = "width:600px ;position: relative;left: 0px;bottom:-30px;"),
+                                             div(plotOutput("ft2"),
+                                                 style="width:600px ;position: relative;left: 650px;bottom:360px;"),
+                                             div(box("Cargo magistrado",sunburstOutput("ft3")),
+                                                 style="width:700px ;position: relative;left:100px;bottom:350px;"),
+                                             div(plotOutput("ft4"),
+                                                 style="width:700px ;position: relative;left:600px;bottom:720px;"),
+                                             div(plotOutput("ft5"),
+                                                 style="width:700px ;position: relative;left:0px;bottom:300px;"))
+                                  ),
+                                  tabPanel("Arrecadação",
+                                           mainPanel(
+                                             div(
+                                               plotOutput( "a1"),
+                                               style = "width:600px ;position: relative;left: 0px;bottom:-30px;"),
+                                             div(plotOutput("despesa3"),
+                                                 style="width:600px ;position: relative;left: 650px;bottom:360px;")
+                                           )))
+             ),
+             
+             
+             tabPanel("Litigiosidade",icon=icon("balance-scale"),
+                      tags$style(type="text/css",
+                                 ".shiny-output-error { visibility: hidden; }",
+                                 ".shiny-output-error:before { visibility: hidden; }"),
                       sidebarPanel(style="width:300px;position: relative;left:0px;bottom:-70px;",
-                                   selectInput("jus2",'Justiça',choices = unique(dados$justica)),
-                                   selectInput("tribunal2","Tribunal",choices = unique(dados$sigla)),
-                                   selectInput("uf2","UF",choices = unique(dados$uf_sede)),
-                                   selectInput("ano2","Ano",choices = unique(dados$ano))),
+                                   selectInput("jus1",'Justiça',choices = unique(dados$justica)),
+                                   selectInput("tribunal1","Tribunal",choices = unique(dados$sigla)),
+                                   selectInput("uf1","UF",choices = unique(dados$uf_sede)),
+                                   selectInput("ano1","Ano",choices = unique(dados$ano))
+                                   
+                      ),mainPanel(
+                        div(plotOutput("l1"),
+                            style="width:650px ;"),
+                        div(plotOutput("l2"),
+                            style="width:650px;")
+                      )),
+             tabPanel("Produtividade",icon=icon("chart-line"),
+                      tags$style(type="text/css",
+                                 ".shiny-output-error { visibility: hidden; }",
+                                 ".shiny-output-error:before { visibility: hidden; }"),
+                      tabsetPanel(
+                        tabPanel("Indicadores",
+                                 sidebarPanel(style="width:300px;position: relative;left:0px;bottom:-70px;",
+                                              selectInput("jus2",'Justiça',choices = unique(dados$justica)),
+                                              selectInput("tribunal2","Tribunal",choices = unique(dados$sigla)),
+                                              selectInput("uf2","UF",choices = unique(dados$uf_sede)),
+                                              selectInput("ano2","Ano",choices = unique(dados$ano))),
+                                 mainPanel(
+                                   div(plotlyOutput('i1'),
+                                       style="width:700px;position: relative;left:-130px;bottom:-50px;"))),
+                        tabPanel("Tempo de Processo",
+                                 sidebarPanel(style="width:300px;position: relative;left:0px;bottom:-70px;",
+                                              selectInput("jus3",'Justiça',choices = unique(dados$justica)),
+                                              selectInput("tribunal3","Tribunal",choices = unique(dados$sigla)),
+                                              selectInput("uf3","UF",choices = unique(dados$uf_sede)),
+                                              selectInput("ano3","Ano",choices = unique(dados$ano)))))),
+             tabPanel("Acesso à Justiça",icon=icon("globe"),
+                      tags$style(type="text/css",
+                                 ".shiny-output-error { visibility: hidden; }",
+                                 ".shiny-output-error:before { visibility: hidden; }"),
+                      inputPanel(
+                        selectInput("ano4","Ano",choices = unique(dados$ano))),
                       mainPanel(
-                        div(plotlyOutput('i1'),
-                            style="width:700px;position: relative;left:-130px;bottom:-50px;",))),
-             tabPanel("Tempo de Processo",
-                      sidebarPanel(style="width:300px;position: relative;left:0px;bottom:-70px;",
-                                   selectInput("jus3",'Justiça',choices = unique(dados$justica)),
-                                   selectInput("tribunal3","Tribunal",choices = unique(dados$sigla)),
-                                   selectInput("uf3","UF",choices = unique(dados$uf_sede)),
-                                   selectInput("ano3","Ano",choices = unique(dados$ano)))))),
-  tabPanel("Acesso à Justiça",icon=icon("globe"),
-           tags$style(type="text/css",
-                      ".shiny-output-error { visibility: hidden; }",
-                      ".shiny-output-error:before { visibility: hidden; }"),
-           inputPanel(
-             selectInput("ano4","Ano",choices = unique(dados$ano))),
-           mainPanel(
-             div(leafletOutput("aj1"),
-                 style="width:500px;position: relative;left:0px;bottom:-70px;"),
-             div(plotlyOutput("aj2"),
-                 style="width:750px;position: relative;left:500px;bottom:350px;"))
-  )
-  
-  )
-)
+                        div(leafletOutput("aj1"),
+                            style="width:500px;position: relative;left:0px;bottom:-70px;"),
+                        div(plotlyOutput("aj2"),
+                            style="width:750px;position: relative;left:500px;bottom:350px;"))
+             )
+             
+                            )
+                            )
 ########################################
 server <- function(input, output,session) {
   observeEvent(input$jus,{
@@ -322,8 +323,7 @@ server <- function(input, output,session) {
   output$despesa1=renderPlot({
     ggplot(react1())+geom_line(aes(x=ano,y=dpj,colour="Despesas por habitantes"))+
       geom_line(aes(ano,dpjio,colour="Despesas por habitantes sem inativos/obras"))+ 
-      scale_colour_manual(values=c("Despesas por habitantes"="blue",
-                                   "Despesas por habitantes sem inativos/obras"="red"))+
+      scale_colour_manual(values=mycol)+
       theme(legend.position="bottom")+labs(colour=" ")+
       ggtitle("Despesas Totais por habitantes segundo ano")+
       labs(x="Ano",y="Total")
@@ -342,13 +342,11 @@ server <- function(input, output,session) {
     
     ggplot(react2()) + 
       geom_line(mapping = aes(x = as.numeric(ano), y = dpj/1000000,fill="Despesas"),
-                stat = "identity",colour="red") + 
+                stat = "identity",colour=mycol[1]) + 
       geom_bar(mapping = aes(x =as.numeric(ano),y=receitas/1000000,fill="Receitas"),stat="identity")+
       scale_x_continuous( breaks=c(209,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019))+
       labs(x="Ano",y="Total(mi)",fill=" ")+
-      scale_fill_manual(values=c("Receitas"="blue",
-                                 "Despesas"="red"))+
-      
+      scale_fill_manual(values=mycol)+
       theme(legend.position="bottom")+
       ggtitle("Totais de despesas e receitas segundo ano")
   })
@@ -366,7 +364,7 @@ server <- function(input, output,session) {
       coord_polar("y", start=0)+
       labs(fill="Justiça",y="",x="")+
       ggtitle("Arrecadação sobre a despesa total da Justiça")+
-      scale_fill_brewer(palette="Set1")+
+      scale_fill_manual(values=mycol)+
       geom_text(aes(label = paste0(round(a*100), "%")), position = position_stack(vjust = 0.5))+
       theme(axis.text = element_blank(),
             axis.ticks = element_blank(),
@@ -396,8 +394,7 @@ server <- function(input, output,session) {
   output$a2=renderPlot({
     ggplot(react5())+geom_line(aes(x=ano,y=dk,colour="Despesas com capital"))+
       geom_line(aes(x=ano,y=di,colour="Despesas com Informatica"))+
-      scale_colour_manual(values=c("Despesas com Informatica"="red",
-                                   "Despesas com capital"="blue"))+
+      scale_colour_manual(values=mycol)+
       theme(legend.position="bottom")+labs(colour="",y="Total", x="Ano")+
       scale_x_continuous( breaks=c(2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019))+
       ggtitle("Despesas com capital e informática segundo ano")
@@ -423,14 +420,13 @@ server <- function(input, output,session) {
       coord_polar("y", start=0)+
       labs(fill="Justiça",y="",x="")+
       ggtitle("Despesas com Recursos Humanos")+
-      scale_fill_brewer(palette="Set1")+
       geom_label_repel(aes(y = round(count,2), label = paste0(round(count*100,3), "%")), 
                        data = react6(), size=4, show.legend = F, nudge_x = 1) +
       theme(axis.text = element_blank(),
             axis.ticks = element_blank(),
             panel.grid  = element_blank())+
-      scale_fill_discrete(labels = c("Benefícios", "Estagiários", "Pessoal e Encargos", "Terceirizados"))
-    
+      scale_fill_manual(values=mycol,
+                        labels = c("Benefícios", "Estagiários", "Pessoal e Encargos", "Terceirizados"))
     
   })
   react7=reactive({
@@ -452,7 +448,9 @@ server <- function(input, output,session) {
                        labels = c("Cargos em Comissão", "Magistrados", "Funções Comissionadas", "Total de Servidores"))+ 
       labs(y="Total")+
       ggtitle("Servidores segundo cargo")+
-      theme(legend.position = "none")
+      theme(legend.position = "none")+
+      scale_fill_manual(values=mycol)
+      
     #theme(rect = element_rect(fill = "transparent")) # all rectangles
   })
   
@@ -466,36 +464,44 @@ server <- function(input, output,session) {
              mgvje=as.numeric(mageje)-as.numeric(magje))%>%
       select(mag1, mag2,magje,mgv1,mgv2,mgvje)
     d7= rownames_to_column(data.frame(count=t(d7)), "cargo")
+    d7$cargo[d7$cargo=="mag1"]="1ª Instância"
+    d7$cargo[d7$cargo=="mag2"]="2ª Instância"
+    d7$cargo[d7$cargo=="magje"]="J. Especial"
+    d7$cargo[d7$cargo=="mgv1"]="1ª Instância"
+    d7$cargo[d7$cargo=="mgv2"]="2ª Instância"
+    d7$cargo[d7$cargo=="mgvje"]="J. Especial"
     
-    d7=data.frame(v1=c(paste0("Cargos Ocupados","-",d7$cargo[1:3]),
-                       paste0("Cargos Vagos","-",d7$cargo[4:6])),
+    d7=data.frame(v1=c(paste0("Ocupados","-",d7$cargo[1:3]),
+                       paste0("Vagos","-",d7$cargo[4:6])),
                   v2=d7$count)
-    sunburst(d7)
+    
+    sunburst(d7,colors = mycol)
     
   })
   react9=reactive({
     d8=despesas%>%
-      filter(justica %in% input$jus,sigla %in% input$tribunal,uf_sede %in% input$uf,
-             ano %in% input$ano)%>%
+      filter(justica=="Estadual",despesas$sigla=="TJ",despesas$uf_sede=="AC",ano=="2010")%>%
       select(ts,tvefet,mag,magv)%>%
       mutate_at(vars(ends_with("_id")), funs(as.numeric(as.character(.))))
     d8= rownames_to_column(data.frame(count=t(d8)), "cargo")
     d8$s=c("servidor","servidor","magristrado","magristrado")
     d8$count=as.numeric(d8$count)
+    d8=arrange(d8,s)
+    d8$percent=unlist(tapply(d8$count,d8$s,function(x) x/sum(x, na.rm=TRUE)))
     d8
   })
   
   output$ft4=renderPlot({
-    ggplot(react9())+geom_col(aes(x=cargo,y=count,
-                                  fill=factor(s)),
-                              position = "dodge")+
+    ggplot(react9(),aes(x=cargo,y=count,fill=factor(s)))+
+      geom_col(aes(y=percent),position = "dodge")+
+      
       labs(fill="",y=" Quantidade",x="")+
       ggtitle("Cargos Ocupados e Vagos segundo cargo")+
       theme(legend.position="bottom")+labs(colour=" ")+
-      scale_fill_discrete(labels = c("Magistrados","Servidores"))+
       scale_x_discrete("Cargos", limits = c("mag","magv","ts","tvefet"),
-                       labels = c("Ocupados", "Vagos", "Ocupados", "Vagos"))
-    
+                       labels = c("Ocupados", "Vagos", "Ocupados", "Vagos"))+
+      scale_fill_manual(values=mycol,labels = c("Magistrados","Servidores"))
+ 
   })
   
   
@@ -520,7 +526,7 @@ server <- function(input, output,session) {
       theme(legend.text = element_text(colour="blue", size=10, 
                                        face="bold"))+
       scale_fill_manual(labels = c(paste0(d9$auxiliar,": ",d9$count)),
-                        values=c("red","green","blue","yellow"))+
+                        values=mycol)+
       labs(fill=" ")+
       theme_void()
   })
@@ -537,8 +543,7 @@ server <- function(input, output,session) {
   output$l1=renderPlot({
     ggplot(react11())+geom_line(aes(x=ano,y=cn,colour="Casos Novos"))+
       geom_line(aes(x=ano,y=tbaix,colour="Casos Baixados"))+
-      scale_colour_manual(values=c("Casos Novos"="red",
-                                   "Casos Baixados"="blue"))+
+      scale_colour_manual(values=mycol)+
       labs(x="Ano",y="Total",colour="")+theme(legend.position="bottom")+
       ggtitle("Quantidade de Casos Novos e Baixados segundo ano")
     
@@ -560,7 +565,9 @@ server <- function(input, output,session) {
                        labels = c("Criminais", "Eletrônicos", "Não-Criminais"))+ 
       labs(y="Total")+
       ggtitle("Casos Novos por categoria")+
-      theme(legend.position = "none")
+      theme(legend.position = "none")+
+      scale_fill_manual(values = mycol)
+    
   })
   ###################################################################
   react13=reactive({

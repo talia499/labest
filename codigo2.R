@@ -10,7 +10,7 @@ library(plotly)
 library(geojsonio)
 library(leaflet)
 library(shinydashboardPlus)
-mycol<- c( "#D94800","#458A00", "#8A8A00", "#005C8A","CC0074")
+mycol<- c( "#D94800","#458A00", "#8A8A00", "#005C8A","#CC0074","darkcyan")
 states <- geojson_read("https://raw.githubusercontent.com/codeforamerica/click_that_hood/master/public/data/brazil-states.geojson",  what = "sp")
 dados<- read.csv2("C:/Users/gabri/Downloads/JN_25-Ago-2020.csv", header=T)
 dados$sigla=(substr(dados$sigla,1,nchar(dados$sigla)-2))
@@ -22,11 +22,21 @@ despesas=dados[,c('uf_abrangida','uf_sede','dsc_tribunal',"justica",'ano',"sigla
                   'tfauxjl', 'tfauxt',"magv")]
 
 casos=dados[,c("justica","ano",'uf_abrangida','uf_sede',"sigla","h1",'cn','tbaix',
-               'cnncrim','cnelet','cncrim','sent1','dec2')]
+               'cnncrim','cnelet','cncrim','sent1','dec2','cnncrim',
+               'cnccrim1','cnccrimje','cncrim2','cncrimtr',
+               'cncncrim1','cncncrimje','cnncrim2','cnncrimtr',
+               'cnex1','cnexje',
+               'cnextfisc1',
+               'cnextje','cnext1',
+               'exejud1','exejudje',
+               'exejudncrim1','exejudncrimje','exejudcrimpl1','exejudcrimnpl1','exejudcrimnplje')]
+
 
 produtividade=dados[,c('uf_abrangida','uf_sede','dsc_tribunal',"justica",'ano',"sigla","h1",
                        'ipm','ipm1','ipm2','ipmje','ipmtr',"ips",
-                       'ipsjud','ipsjud1','ipsjud2','ipsjudstm','ipsjudtr')]
+                       'ipsjud','ipsjud1','ipsjud2','ipsjudstm','ipsjudtr',
+                       'tccrim','tcex1','tcexje','tcncrim',
+                       'tccrim','tcncrim','tcex1','tcexje')]
 assistencia=dados[,c('uf_abrangida','uf_sede','dsc_tribunal',"justica",'ano',"sigla",
                      'jg','a1','a2')]
 ##########################################################################################3
@@ -67,28 +77,29 @@ ui <- shinyUI(
                               carousel(
                                 id = "mycarousel",
                                 carouselItem(
-                                  caption = "Item 1",
+                                  caption = h3("Insumos: Despesas, Força de Trabalho e Arrecadação",style="position: relative;bottom:180px;color:#002f54;"),
                                   div(style="text-align: center;background-color: rgba(10,23,55,0.5);",
                                       img(src = "https://www.contabeis.com.br/assets/img/news/22369c50fddc77c69e16c09af2aa470a.jpg?v=",
                                           onclick = "fakeClick('Insumos')",width="750px",height="300px"))
                                 ),
                                 carouselItem(
-                                  caption = "Item 2",
+                                  caption = h3("Litigiosidade: Número de casos",style="position: relative;bottom:180px;color:darkcyan;"),
                                   div(style="text-align: center;background-color: rgba(10,23,55,0.5);",
                                       img(src = "https://www.viverhoje.org/site/assets/files/1896/leis-direitos_20160822.jpg",
                                           onclick = "fakeClick('Litigiosidade')",width="700px",height="300px"))
                                 ),
                                 carouselItem(
-                                  caption = "Item 3",
+                                  caption = h3("Indicadores de Produtividade e Tempo de Processo",style="position: relative;bottom:180px;color:darkcyan;"),
+                                  div(style="text-align: center;background-color: rgba(10,23,55,0.5);",
+                                      img(src = "https://cerizze.com/wp-content/uploads/2019/04/o-tempo-e-o-processo.jpg",
+                                          onclick = "fakeClick('Produtividade')",width="750px",height="300px")
+                                  )
+                                ),
+                                carouselItem(
+                                  caption = h3("Acesso à Justiça Gratuita",style="position: relative;bottom:180px;color:red;"),
                                   div(style="text-align: center;background-color: rgba(10,23,55,0.5);",
                                       img(src = "https://guimaraes-adv.com/wp-content/uploads/2018/09/25632879542.jpg",
                                           onclick = "fakeClick('Acesso a Justiça')",width="750px",height="300px"))
-                                ),
-                                carouselItem(
-                                  caption = "Item 4",
-                                  div(style="text-align: center;background-color: rgba(10,23,55,0.5);",
-                                      img(src = "https://cerizze.com/wp-content/uploads/2019/04/o-tempo-e-o-processo.jpg",
-                                          onclick = "fakeClick('Produtividade')",width="750px",height="300px"))
                                 )
                                 
                               ),style="width: 148%;
@@ -136,7 +147,9 @@ ui <- shinyUI(
                               "Infromação",
                               tabPanel("Variáveis"),
                               tabPanel("Referencias",
-                                       mainPanel(p(strong("Base de Dados:")," Justiça e Números"),br(),br(),
+                                       mainPanel(p(strong("Base de Dados:")," Justiça e Números",
+                                                   a(href = "https://www.cnj.jus.br/wp-content/uploads/2020/08/25-Ago-2020.v2.zip",
+                                                     target ="_blank","[link]")),br(),br(),
                                                  p(strong("Código no GitHub: "),
                                                    a(href = "https://github.com/talia499/labest",
                                                      target ="_blank","https://github.com/talia499/labest")),
@@ -160,19 +173,32 @@ ui <- shinyUI(
                                          p("Talia Alves Xavier")
                                        ))
                                        ),style="width: 650px;position:relative; left:195px;bottom:-15px;
-                       text-align: justify;")
+                       text-align: justify;"),
+                            div(style="position:relative; left:0px;bottom:-50px;
+                                border-top-style: ridge;border-top-color: #002f54;",
+                                box(div(img(src = "https://upload.wikimedia.org/wikipedia/commons/d/d0/S%C3%ADmbolo_da_UnB.png",
+                                            width="100px"),style="position:relative; left:0px;bottom:20px;"),
+                                    div(img(src="https://cnj.jus.br/cnj15anos/images/marca-cnj-preta.png",width="140px"),
+                                        style="position:relative; left:110px;bottom:70px;")))
                               ),
-             
+  #######################################################################           
              tabPanel("Insumos",icon=icon("coins"),tags$style(type="text/css",
                                                               ".shiny-output-error { visibility: hidden; }",
                                                               ".shiny-output-error:before { visibility: hidden; }"),
                       inputPanel(
                         selectInput("jus",'Justiça',choices = unique(dados$justica)),
                         selectInput("tribunal","Tribunal",choices = unique(dados$sigla)),
-                        selectInput("uf","UF",choices = unique(dados$uf_sede)),
+                        selectInput("uf","UF",choices =list('Norte' = list("AC","AM","AP","TO","PA","RR","RO"),
+                                                            'Nordeste' = list("CE","AL","BA","MA","PA","PE",
+                                                                              "PI","RN","SE"),
+                                                            'Centro-Oeste' = list("GO","MT","MS","DF"),
+                                                            'Sudeste'=list("ES","MG","RJ","SP"),
+                                                            'Sul'=list("PR","SC","RS"))
+                                      ),
                         selectInput("ano","Ano",choices = unique(dados$ano))
                         
                       ),
+                      #################################
                       tabsetPanel(tabPanel("Despesas",
                                            mainPanel(
                                              div(
@@ -183,19 +209,20 @@ ui <- shinyUI(
                                              div(plotOutput("a2"),
                                                  style="width:700px ;position: relative;left:0px;bottom:350px;")
                                            )),
+                                  #######################
                                   tabPanel("Força de Trabalho",
                                            mainPanel(
                                              div(plotOutput("ft1"),
                                                  style = "width:600px ;position: relative;left: 0px;bottom:-30px;"),
                                              div(plotOutput("ft2"),
                                                  style="width:600px ;position: relative;left: 650px;bottom:360px;"),
-                                             div(box("Cargo magistrado",sunburstOutput("ft3")),
-                                                 style="width:700px ;position: relative;left:100px;bottom:350px;"),
-                                             div(plotOutput("ft4"),
-                                                 style="width:700px ;position: relative;left:600px;bottom:720px;"),
                                              div(plotOutput("ft5"),
-                                                 style="width:700px ;position: relative;left:0px;bottom:300px;"))
+                                                 style="width:600px ;position: relative;left:0px;bottom:350px;"),
+                                             div(plotOutput("ft4"),
+                                                 style="width:600px ;position: relative;left:650px;bottom:720px;")
+                                             )
                                   ),
+                                  ############################
                                   tabPanel("Arrecadação",
                                            mainPanel(
                                              div(
@@ -206,43 +233,68 @@ ui <- shinyUI(
                                            )))
              ),
              
-             
+       ###############################################################3      
              tabPanel("Litigiosidade",icon=icon("balance-scale"),
                       tags$style(type="text/css",
                                  ".shiny-output-error { visibility: hidden; }",
                                  ".shiny-output-error:before { visibility: hidden; }"),
-                      sidebarPanel(style="width:300px;position: relative;left:0px;bottom:-70px;",
+                      inputPanel(
                                    selectInput("jus1",'Justiça',choices = unique(dados$justica)),
                                    selectInput("tribunal1","Tribunal",choices = unique(dados$sigla)),
-                                   selectInput("uf1","UF",choices = unique(dados$uf_sede)),
+                                   selectInput("uf1","UF",choices =list(`Norte` = list("AC","AM","AP","TO","PA","RR","RO"),
+                                                                        `Nordeste` = list("CE","AL","BA","MA","PA","PE",
+                                                                                          "PI","RN","SE"),
+                                                                        `Centro-Oeste` = list("GO","MT","MS","DF"),
+                                                                        `Sudeste`=list("ES","MG","RJ","SP"),
+                                                                        `Sul`=list("PR","SC","RS"))),
                                    selectInput("ano1","Ano",choices = unique(dados$ano))
                                    
                       ),mainPanel(
                         div(plotOutput("l1"),
-                            style="width:650px ;"),
+                            style="width:600px ;position: relative;left: 0px;bottom:-30px;"),
                         div(plotOutput("l2"),
-                            style="width:650px;")
+                            style="width:600px ;position: relative;left: 650px;bottom:360px;"),
+                        div(plotOutput("l3"),
+                            style="width:600px ;position: relative;left:0px;bottom:350px;"),
+                        div(plotOutput("l4"),
+                            style="width:600px ;position: relative;left:650px;bottom:760px;")
                       )),
+  ######################################################
              tabPanel("Produtividade",icon=icon("chart-line"),
                       tags$style(type="text/css",
                                  ".shiny-output-error { visibility: hidden; }",
                                  ".shiny-output-error:before { visibility: hidden; }"),
+                      #########################################3
                       tabsetPanel(
                         tabPanel("Indicadores",
                                  sidebarPanel(style="width:300px;position: relative;left:0px;bottom:-70px;",
                                               selectInput("jus2",'Justiça',choices = unique(dados$justica)),
                                               selectInput("tribunal2","Tribunal",choices = unique(dados$sigla)),
-                                              selectInput("uf2","UF",choices = unique(dados$uf_sede)),
+                                              selectInput("uf2","UF",choices =list(`Norte` = list("AC","AM","AP","TO","PA","RR","RO"),
+                                                                                   `Nordeste` = list("CE","AL","BA","MA","PA","PE",
+                                                                                                     "PI","RN","SE"),
+                                                                                   `Centro-Oeste` = list("GO","MT","MS","DF"),
+                                                                                   `Sudeste`=list("ES","MG","RJ","SP"),
+                                                                                   `Sul`=list("PR","SC","RS"))),
                                               selectInput("ano2","Ano",choices = unique(dados$ano))),
-                                 mainPanel(
+                                 mainPanel(div(plotOutput("i2"),
+                                               style="width:700px;position: relative;left:-130px;bottom:-50px;"),
                                    div(plotlyOutput('i1'),
-                                       style="width:700px;position: relative;left:-130px;bottom:-50px;"))),
+                                       style="width:700px;position: relative;left:-130px;bottom:-50px;")
+                                   )),
+                        ##############################################
                         tabPanel("Tempo de Processo",
                                  sidebarPanel(style="width:300px;position: relative;left:0px;bottom:-70px;",
                                               selectInput("jus3",'Justiça',choices = unique(dados$justica)),
                                               selectInput("tribunal3","Tribunal",choices = unique(dados$sigla)),
-                                              selectInput("uf3","UF",choices = unique(dados$uf_sede)),
+                                              selectInput("uf3","UF",choices =list(`Norte` = list("AC","AM","AP","TO","PA","RR","RO"),
+                                                                                   `Nordeste` = list("CE","AL","BA","MA","PA","PE",
+                                                                                                     "PI","RN","SE"),
+                                                                                   `Centro-Oeste` = list("GO","MT","MS","DF"),
+                                                                                   `Sudeste`=list("ES","MG","RJ","SP"),
+                                                                                   `Sul`=list("PR","SC","RS"))),
                                               selectInput("ano3","Ano",choices = unique(dados$ano)))))),
+  #####################################################
              tabPanel("Acesso à Justiça",icon=icon("globe"),
                       tags$style(type="text/css",
                                  ".shiny-output-error { visibility: hidden; }",
@@ -344,7 +396,7 @@ server <- function(input, output,session) {
       geom_line(mapping = aes(x = as.numeric(ano), y = dpj/1000000,fill="Despesas"),
                 stat = "identity",colour=mycol[1]) + 
       geom_bar(mapping = aes(x =as.numeric(ano),y=receitas/1000000,fill="Receitas"),stat="identity")+
-      scale_x_continuous( breaks=c(209,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019))+
+      scale_x_continuous( breaks=c(2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019))+
       labs(x="Ano",y="Total(mi)",fill=" ")+
       scale_fill_manual(values=mycol)+
       theme(legend.position="bottom")+
@@ -450,34 +502,11 @@ server <- function(input, output,session) {
       ggtitle("Servidores segundo cargo")+
       theme(legend.position = "none")+
       scale_fill_manual(values=mycol)
-      
+    
     #theme(rect = element_rect(fill = "transparent")) # all rectangles
   })
   
-  output$ft3=renderSunburst({
-    d7=despesas%>%
-      filter(justica=="Estadual",despesas$sigla=="TJ",despesas$uf_sede=="AC",ano=="2010")%>%
-      select(mag,mage,mag1, mag2,magje, mage1, mage2, mageje,magv)%>%
-      mutate(mgv=as.numeric(as.numeric(mage))-as.numeric(as.numeric(mag)),
-             mgv1=as.numeric(mage1)-as.numeric(mag1),
-             mgv2=as.numeric(mage2)-as.numeric(mag2),
-             mgvje=as.numeric(mageje)-as.numeric(magje))%>%
-      select(mag1, mag2,magje,mgv1,mgv2,mgvje)
-    d7= rownames_to_column(data.frame(count=t(d7)), "cargo")
-    d7$cargo[d7$cargo=="mag1"]="1ª Instância"
-    d7$cargo[d7$cargo=="mag2"]="2ª Instância"
-    d7$cargo[d7$cargo=="magje"]="J. Especial"
-    d7$cargo[d7$cargo=="mgv1"]="1ª Instância"
-    d7$cargo[d7$cargo=="mgv2"]="2ª Instância"
-    d7$cargo[d7$cargo=="mgvje"]="J. Especial"
-    
-    d7=data.frame(v1=c(paste0("Ocupados","-",d7$cargo[1:3]),
-                       paste0("Vagos","-",d7$cargo[4:6])),
-                  v2=d7$count)
-    
-    sunburst(d7,colors = mycol)
-    
-  })
+  
   react9=reactive({
     d8=despesas%>%
       filter(justica=="Estadual",despesas$sigla=="TJ",despesas$uf_sede=="AC",ano=="2010")%>%
@@ -501,7 +530,7 @@ server <- function(input, output,session) {
       scale_x_discrete("Cargos", limits = c("mag","magv","ts","tvefet"),
                        labels = c("Ocupados", "Vagos", "Ocupados", "Vagos"))+
       scale_fill_manual(values=mycol,labels = c("Magistrados","Servidores"))
- 
+    
   })
   
   
@@ -549,26 +578,77 @@ server <- function(input, output,session) {
     
   })
   react12=reactive({
+    
     c2=casos%>%
-      filter(justica %in% input$jus1,sigla %in% input$tribunal1,uf_sede %in% input$uf1,
-             ano %in% input$ano1)%>%
-      select(cnncrim,cnelet,cncrim)%>%
-      mutate_if(is.character, as.numeric)
+      filter(justica %in% input$jus1,sigla %in% input$tribunal1,uf_sede %in% input$uf1,ano %in% input$ano1)%>%
+      select( ano,cnccrim1,cnccrimje,cncrim2,cncrimtr,
+              cncncrim1,cncncrimje,cnncrim2,cnncrimtr,
+              cnex1,cnexje,
+              cnextfisc1,
+              cnextje,cnext1,
+              exejud1,exejudje)%>%
+      mutate_if(is.character, as.numeric)%>%
+      mutate(cocr=cnccrim1+cnccrimje+cncrim2+cncrimtr,
+             concr=cncncrim1+cncncrimje+cnncrim2+cnncrimtr,
+             cne=cnex1+cnexje,
+             cnef=cnextfisc1,
+             cnetej=cnextje+cnext1,
+             cnej=exejud1+exejudje
+      )%>%
+      select(cocr,concr,cne,cnef,cnetej,cnej)
     
     c2=rownames_to_column(data.frame(count=t(c2)), "cn")
     c2
   })
   output$l2=renderPlot({
-    ggplot(react12())+geom_col(aes(x=cn,y=count, fill=c("#ffae00","#2e8b57","#d174a8")))+
+    ggplot(react12())+geom_col(aes(x=cn,y=count,fill=mycol))+
+      scale_fill_manual(values=mycol,
+                        labels = )+
+      scale_x_discrete("Casos Novos", limits = c("cne","cnef","cnej","cnetej","cocr","concr"),
+                       labels = c("Execuação Não Fiscal","Execuação Fiscal","Execuação Judicial",
+                                  "Execuação Titulo Extrajudicial","Conhecimento Crimanais",
+                                  "Conhecimento Não Crimanais"))+
       coord_flip()+
-      scale_x_discrete("Casos Novos", limits = c("cncrim","cnelet","cnncrim"),
-                       labels = c("Criminais", "Eletrônicos", "Não-Criminais"))+ 
       labs(y="Total")+
       ggtitle("Casos Novos por categoria")+
-      theme(legend.position = "none")+
-      scale_fill_manual(values = mycol)
+      theme(legend.position = "none")
     
   })
+  output$l3=renderPlot({
+    c3=casos%>%
+      filter(justica %in% input$jus1,sigla %in% input$tribunal1,uf_sede %in% input$uf1,ano %in% input$ano1)%>%
+      select(exejudncrim1,exejudncrimje,exejudcrimpl1,exejudcrimnpl1,exejudcrimnplje)%>%
+      mutate_if(is.character, as.numeric)%>%
+      mutate(exj=exejudncrim1+exejudncrimje,
+             expp=exejudcrimpl1,
+             expnp=exejudcrimnpl1+exejudcrimnplje)%>%
+      select(exj,expp,expnp)
+    
+    c3=rownames_to_column(data.frame(count=t(c3)), "cn")
+    
+    ggplot(c3)+geom_col(aes(x=cn,y=count,fill=c("#ffae00","#2e8b57","#d174a8")))+
+      scale_fill_manual(values=mycol,
+                        labels = )+
+      scale_x_discrete("Execuções", limits = c('exj','expp','expnp'),
+                       labels = c("Judical","Pena Privativa","Pena Não Privativa"))+
+      labs(y="Total")+
+      ggtitle("Execuções por categoria")+
+      theme(legend.position = "none")
+  })
+  
+  output$l4=renderPlot({
+    c4=casos%>%
+      filter(justica %in% input$jus1,sigla %in% input$tribunal1,uf_sede %in% input$uf1)%>%
+      select(ano,cnelet)%>%
+      mutate_if(is.character, as.numeric)
+    ggplot(c4)+geom_line(aes(x=ano,y=cnelet,colour=mycol[1]))+
+      scale_x_continuous( breaks=c(2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019))+
+      labs(y="Quantidade",x="Ano")+
+      ggtitle("Série Histórica Casos Eletrônicos")+
+      theme(legend.position = "none")
+  })
+  
+  
   ###################################################################
   react13=reactive({
     p1=produtividade%>%
@@ -577,7 +657,17 @@ server <- function(input, output,session) {
       select(ipm,ipm1,ipm2,ipmje,ipmtr,ips,ipsjud,ipsjud1,ipsjud2,ipsjudtr)%>%
       mutate_all(funs(gsub(",", ".", .) ))%>%
       mutate_all(funs(round(as.numeric(.),2)))
-    p1=rownames_to_column(data.frame("produtividade"=t(p1)), "indice")
+    p1=rownames_to_column(data.frame("produtividade"=t(p1)), "Produtividade")
+    p1$Produtividade[p1$Produtividade=="ipm"]="Magistrados"
+    p1$Produtividade[p1$Produtividade=="ipm1"]="Magistrados 1º grau"
+    p1$Produtividade[p1$Produtividade=="ipm2"]="Magistrados 2º grau"
+    p1$Produtividade[p1$Produtividade=="ipmje"]="Magistrados Juizados Especiais"
+    p1$Produtividade[p1$Produtividade=="ipmtr"]="Magistrados Turmas Recursais"
+    p1$Produtividade[p1$Produtividade=="ipsjud"]="Servidores"
+    p1$Produtividade[p1$Produtividade=="ips"]="Servidores Área Judiciária"
+    p1$Produtividade[p1$Produtividade=="ipsjud1"]="Servidores Área Judiciária 1º grau"
+    p1$Produtividade[p1$Produtividade=="ipsjud2"]="Servidores Área Judiciária 2º grau"
+    p1$Produtividade[p1$Produtividade=="ipsjudtr"]="Servidores Área Judiciária Turmas Recursais"
     p1
   })
   output$i1=renderPlotly({
@@ -591,7 +681,21 @@ server <- function(input, output,session) {
                        font = list(family = "Arial", size = 14, color = c("white","black")),
                        fill = list(color = c("darkblue", '#B0C4DE')))) 
   })
-  
+  output$i2=renderPlot({
+    p2=produtividade%>%
+      filter(justica %in% input$jus2,sigla %in% input$tribunal2,uf_sede %in% input$uf2)%>%
+      select(ano,tccrim,tcncrim,tcex1,tcexje)%>%
+      mutate_all(funs(gsub(",", ".", .) ))%>%
+      mutate_all(funs(round(as.numeric(.),2)))
+    
+    ggplot(p2,aes(x=ano))+geom_line(aes(y=tccrim,colour="Criminal"))+
+      geom_line(aes(y=tcncrim,colour="Não Criminal"))+
+      geom_line(aes(y=tcex1,colour="Execução 1º Grau"))+
+      geom_line(aes(y=tcexje,colour="Execução Juizado Especiais"))+
+      scale_color_manual(values=mycol)+
+      theme(legend.position="bottom")+labs(color=" ",y="Taxa",x="Ano")+
+      ggtitle("Taxa de Congestionamento")
+  })
   
   #################################################
   output$aj1=renderLeaflet({
@@ -650,14 +754,16 @@ server <- function(input, output,session) {
     a2[28,]=a2[7,]
     a2=a2[-7,]
     a2<-cbind(states@data[,3:4],a2)
-    a2$regiao_id[a2$regiao_id==1]="sul"
-    a2$regiao_id[a2$regiao_id==2]="sudeste"
-    a2$regiao_id[a2$regiao_id==3]="norte"
-    a2$regiao_id[a2$regiao_id==4]="nordeste"
-    a2$regiao_id[a2$regiao_id==5]="centro oeste"
+    a2$regiao_id[a2$regiao_id==1]="Sul"
+    a2$regiao_id[a2$regiao_id==2]="Sudeste"
+    a2$regiao_id[a2$regiao_id==3]="Norte"
+    a2$regiao_id[a2$regiao_id==4]="Nordeste"
+    a2$regiao_id[a2$regiao_id==5]="Centro Oeste"
     a2=a2%>%group_by(regiao_id)%>%
       summarise(a1=round(sum(a1,na.rm =T),2),
                 a2=round(sum(a2,na.rm=T),2))
+    colnames(a2)=c("Região","Assistência Judiciária Gratuita em relação à Despesa Total da Justiça",
+                   "Assistência Judiciária Gratuita por 100.000 habitantes")
     
     
     plot_ly(type="table",
@@ -674,3 +780,4 @@ server <- function(input, output,session) {
 }
 
 shinyApp(ui, server)
+

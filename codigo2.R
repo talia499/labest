@@ -41,6 +41,7 @@ assistencia=dados[,c('uf_abrangida','uf_sede','dsc_tribunal',"justica",'ano',"si
                      'jg','a1','a2')]
 ##########################################################################################3
 
+
 ui <- shinyUI(
   navbarPage("CNJ",tabPanel("Home",icon = icon("home", lib =  "glyphicon"),
                             tags$style(HTML("
@@ -172,16 +173,16 @@ ui <- shinyUI(
                                          p("Pedro Gabriel Moura"),
                                          p("Talia Alves Xavier")
                                        ))
-                                       ),style="width: 650px;position:fixed;left:195px;bottom:-150px;;
+                                       ),style="width: 650px;position:absolute;left:195px;bottom:-150px;;
                        text-align: justify;"),
-                            div(style="position:relative; left:0px;bottom:-50px;
-                                border-top-style: ridge;border-top-color: #002f54;",
+                            div(style="position:absolute; left:0px;bottom:-300px;
+                                border-top-style: ridge;border-top-color: #002f54;width:2000px;",
                                 box(div(img(src = "https://upload.wikimedia.org/wikipedia/commons/d/d0/S%C3%ADmbolo_da_UnB.png",
                                             width="100px"),style="position:relative; left:0px;bottom:20px;"),
                                     div(img(src="https://cnj.jus.br/cnj15anos/images/marca-cnj-preta.png",width="140px"),
                                         style="position:relative; left:110px;bottom:70px;")))
                               ),
-  #######################################################################           
+             #######################################################################           
              tabPanel("Insumos",icon=icon("coins"),tags$style(type="text/css",
                                                               ".shiny-output-error { visibility: hidden; }",
                                                               ".shiny-output-error:before { visibility: hidden; }"),
@@ -194,7 +195,7 @@ ui <- shinyUI(
                                                             'Centro-Oeste' = list("GO","MT","MS","DF"),
                                                             'Sudeste'=list("ES","MG","RJ","SP"),
                                                             'Sul'=list("PR","SC","RS"))
-                                      ),
+                        ),
                         selectInput("ano","Ano",choices = unique(dados$ano))
                         
                       ),
@@ -220,7 +221,7 @@ ui <- shinyUI(
                                                  style="width:600px ;position: relative;left:0px;bottom:350px;"),
                                              div(plotOutput("ft4"),
                                                  style="width:600px ;position: relative;left:650px;bottom:720px;")
-                                             )
+                                           )
                                   ),
                                   ############################
                                   tabPanel("Arrecadação",
@@ -233,22 +234,22 @@ ui <- shinyUI(
                                            )))
              ),
              
-       ###############################################################3      
+             ###############################################################3      
              tabPanel("Litigiosidade",icon=icon("balance-scale"),
                       tags$style(type="text/css",
                                  ".shiny-output-error { visibility: hidden; }",
                                  ".shiny-output-error:before { visibility: hidden; }"),
                       inputPanel(
-                                   selectInput("jus1",'Justiça',choices = unique(dados$justica)),
-                                   selectInput("tribunal1","Tribunal",choices = unique(dados$sigla)),
-                                   selectInput("uf1","UF",choices =list(`Norte` = list("AC","AM","AP","TO","PA","RR","RO"),
-                                                                        `Nordeste` = list("CE","AL","BA","MA","PA","PE",
-                                                                                          "PI","RN","SE"),
-                                                                        `Centro-Oeste` = list("GO","MT","MS","DF"),
-                                                                        `Sudeste`=list("ES","MG","RJ","SP"),
-                                                                        `Sul`=list("PR","SC","RS"))),
-                                   selectInput("ano1","Ano",choices = unique(dados$ano))
-                                   
+                        selectInput("jus1",'Justiça',choices = unique(dados$justica)),
+                        selectInput("tribunal1","Tribunal",choices = unique(dados$sigla)),
+                        selectInput("uf1","UF",choices =list(`Norte` = list("AC","AM","AP","TO","PA","RR","RO"),
+                                                             `Nordeste` = list("CE","AL","BA","MA","PA","PE",
+                                                                               "PI","RN","SE"),
+                                                             `Centro-Oeste` = list("GO","MT","MS","DF"),
+                                                             `Sudeste`=list("ES","MG","RJ","SP"),
+                                                             `Sul`=list("PR","SC","RS"))),
+                        selectInput("ano1","Ano",choices = unique(dados$ano))
+                        
                       ),mainPanel(
                         div(plotOutput("l1"),
                             style="width:600px ;position: relative;left: 0px;bottom:-30px;"),
@@ -259,7 +260,7 @@ ui <- shinyUI(
                         div(plotOutput("l4"),
                             style="width:600px ;position: relative;left:650px;bottom:760px;")
                       )),
-  ######################################################
+             ######################################################
              tabPanel("Produtividade",icon=icon("chart-line"),
                       tags$style(type="text/css",
                                  ".shiny-output-error { visibility: hidden; }",
@@ -279,9 +280,9 @@ ui <- shinyUI(
                                               selectInput("ano2","Ano",choices = unique(dados$ano))),
                                  mainPanel(div(plotOutput("i2"),
                                                style="width:700px;position: relative;left:-130px;bottom:-50px;"),
-                                   div(plotlyOutput('i1'),
-                                       style="width:700px;position: relative;left:-130px;bottom:-50px;")
-                                   )),
+                                           div(plotlyOutput('i1'),
+                                               style="width:700px;position: relative;left:-130px;bottom:-50px;")
+                                 )),
                         ##############################################
                         tabPanel("Tempo de Processo",
                                  sidebarPanel(style="width:300px;position: relative;left:0px;bottom:-70px;",
@@ -294,7 +295,7 @@ ui <- shinyUI(
                                                                                    `Sudeste`=list("ES","MG","RJ","SP"),
                                                                                    `Sul`=list("PR","SC","RS"))),
                                               selectInput("ano3","Ano",choices = unique(dados$ano)))))),
-  #####################################################
+             #####################################################
              tabPanel("Acesso à Justiça",icon=icon("globe"),
                       tags$style(type="text/css",
                                  ".shiny-output-error { visibility: hidden; }",

@@ -172,7 +172,7 @@ ui <- shinyUI(
                                          p("Pedro Gabriel Moura"),
                                          p("Talia Alves Xavier")
                                        ))
-                                       ),style="width: 650px;position:relative; left:195px;bottom:-15px;
+                                       ),style="width: 650px;position:fixed;left:195px;bottom:-150px;;
                        text-align: justify;"),
                             div(style="position:relative; left:0px;bottom:-50px;
                                 border-top-style: ridge;border-top-color: #002f54;",

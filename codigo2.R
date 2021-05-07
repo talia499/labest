@@ -9,7 +9,7 @@ library(plotly)
 library(geojsonio)
 library(leaflet)
 library(shinydashboardPlus)
-mycol<- c( "#D94800","#458A00", "#8A8A00", "#005C8A","#CC0074","darkcyan")
+mycol<- c( "#00a2e8","#00d699","#e4572e","#0096aa", "#002f54", "#00585e")
 states <- geojson_read("https://raw.githubusercontent.com/codeforamerica/click_that_hood/master/public/data/brazil-states.geojson",  what = "sp")
 dados<- read.csv2("C:/Users/gabri/Downloads/JN_25-Ago-2020.csv", header=T)
 dados$sigla=(substr(dados$sigla,1,nchar(dados$sigla)-2))
@@ -509,7 +509,7 @@ server <- function(input, output,session) {
     d2
   })
   output$a1=renderPlot({
-    ggplot(react4(), aes(x=factor(ano)))+geom_col(aes(y=i),fill = "#ffae00")+
+    ggplot(react4(), aes(x=factor(ano)))+geom_col(aes(y=i),fill = "#00a2e8")+
       ggtitle("Arrecadação sobre a despesa total da Justiça segundo ano")+
       labs(x="Ano",y="Percentual")
   })

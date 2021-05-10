@@ -127,7 +127,7 @@ ui <- shinyUI(
                                                  demandas, com a atual produtividade de magistrados
                                                  e servidores, seriam necessários aproximadamente 3 
                                                  anos de trabalho para zerar o estoque', essa afirmação 
-                                                 é preocupante pois, agrava a sensação de ineficiência 
+                                                 é preocupante, pois agrava a sensação de ineficiência 
                                                  do Poder Judiciário, nesse sentido, objetiva-se desenvolver
                                                  uma plataforma que permita analisar a produtividade de 
                                                  componentes desse setor. ",
@@ -137,14 +137,14 @@ ui <- shinyUI(
                                                           disciplina Laboratório em Estatística, do Departamento 
                                                           de Estatística da Universidade de Brasília (UnB) com 
                                                           o Conselho Nacional de Justiça (CNJ) com os objetivos:")),br(),
-                                                 p("Tornar o acesso aos dados do módulo de Produtividade Mensal do 
+                                                 p("Tornar o acesso aos dados do módulo de Justiça e Números do 
                                                    CNJ mais acessível, criando novos mecanismos de disponibilização 
                                                    dos dados e consequentemente comparação e avaliação da produtividade 
                                                    dos juízes e das unidades judiciárias"),br(),
                                                  p("Criar uma plataforma que possibilite melhor 
                                                    visualização do cenário do sistema judicial brasileiro."),
                                                  style="width:173%;")),
-                              "Infromação",
+                              "Informação",
                               tabPanel("Variáveis",
                                        mainPanel(p("Para este trabalho, os dados foram extraídos do módulo
                                                            de Justiça e Números, do Conselho Nacional de Justiça,  
@@ -226,7 +226,7 @@ ui <- shinyUI(
                                                  p("Sigla - Sigla do Tribunal;"),
                                                  p("Habitantes - Número de Habitantes."),
                                                  style="width:173%;")),
-                              tabPanel("Referencias",
+                              tabPanel("Referências",
                                        mainPanel(p(strong("Base de Dados:")," Justiça e Números",
                                                    a(href = "https://www.cnj.jus.br/wp-content/uploads/2020/08/25-Ago-2020.v2.zip",
                                                      target ="_blank","[link]")),br(),br(),
@@ -723,8 +723,8 @@ server <- function(input, output,session) {
       mutate_if(is.character, as.numeric)
     ggplot(c4)+geom_line(aes(x=ano,y=cnelet,colour=mycol[1]))+
       scale_x_continuous( breaks=c(2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019))+
-      labs(y="Quantidade",x="Ano")+
-      ggtitle("Série Histórica Casos Eletrônicos")+
+      labs(y="Total",x="Ano")+
+      ggtitle("Quantidade de Casos Eletrônicos segundo ano")+
       theme(legend.position = "none")
   })
   
@@ -838,7 +838,7 @@ server <- function(input, output,session) {
     a2$regiao_id[a2$regiao_id==2]="Sudeste"
     a2$regiao_id[a2$regiao_id==3]="Norte"
     a2$regiao_id[a2$regiao_id==4]="Nordeste"
-    a2$regiao_id[a2$regiao_id==5]="Centro Oeste"
+    a2$regiao_id[a2$regiao_id==5]="Centro-Oeste"
     a2=a2%>%group_by(regiao_id)%>%
       summarise(a1=round(sum(a1,na.rm =T),2),
                 a2=round(sum(a2,na.rm=T),2))

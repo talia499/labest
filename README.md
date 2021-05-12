@@ -5,9 +5,9 @@ Justiça e Números
 Gabriela Moreira de Azevedo Soares
 
 # Equipe
-1. Larissa Moreno Silva\
-3.Pedro Gabriel Moura\
-4.Talia Alves Xavier\
+1. Larissa Moreno Silva
+2. Pedro Gabriel Moura
+3. Talia Alves Xavier
 
 # Introdução
 O judiciário é um dos três poderes do Estado, ele tem como principal função julgar e aplicar leis no país. O sistema judiciário é considerado lento por grande parte da população e um dos motivos para isso é que ele  não  consegue  atender  às  demandas  da  justiça dentro  do  ritmo  necessário,  ou  seja,  os  números  de processos  são  muito  maiores  do  que  os  magistrados  e  servidores  conseguem  finalizar,  mesmo  que  os processos pendentes na Justiça estejam em queda, de acordo com Relatório Justiça em Números 2019 da CNJ.  Segundo  o  Diário  Oficial  da  União  de  2017,"mesmo  que  o  Poder  Judiciário  fosse  paralisado  sem ingresso de novas demandas, com a atual produtividade de magistrados e servidores, seriam necessários aproximadamente 3 anos de trabalho para zerar o estoque", essa afirmação é preocupante pois, agrava a sensação de ineficiência do Poder Judiciário, nesse sentido, objetiva-se desenvolver uma plataforma que permita analisar a produtividade de componentes desse setor. 

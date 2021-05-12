@@ -1,35 +1,30 @@
-Plano de Trabalho
-Identificação da equipe
+#Tema: Justiça e Números
 
-Tema: Justiça e Números
-
-Mentor: 
+#Mentor: 
 Gabriela Moreira de Azevedo Soares
 
-Equipe:
+#Equipe:
 1. Larissa Moreno Silva\
 3.Pedro Gabriel Moura\
 4.Talia Alves Xavier
 
-Dados do plano de trabalho
-
-Introdução\
+#Introdução\
 O judiciário é um dos três poderes do Estado, ele tem como principal função julgar e aplicar leis no país. O sistema judiciário é considerado lento por grande parte da população e um dos motivos para isso é que ele  não  consegue  atender  às  demandas  da  justiça dentro  do  ritmo  necessário,  ou  seja,  os  números  de processos  são  muito  maiores  do  que  os  magistrados  e  servidores  conseguem  finalizar,  mesmo  que  os processos pendentes na Justiça estejam em queda, de acordo com Relatório Justiça em Números 2019 da CNJ.  Segundo  o  Diário  Oficial  da  União  de  2017,"mesmo  que  o  Poder  Judiciário  fosse  paralisado  sem ingresso de novas demandas, com a atual produtividade de magistrados e servidores, seriam necessários aproximadamente 3 anos de trabalho para zerar o estoque", essa afirmação é preocupante pois, agrava a sensação de ineficiência do Poder Judiciário, nesse sentido, objetiva-se desenvolver uma plataforma que permita analisar a produtividade de componentes desse setor. 
 
-Objetivos\
+#Objetivos\
 Tornar o acesso aos dados do módulo de Justiça e Números do CNJ mais acessível, criando novos mecanismos de disponibilização dos dados e consequentemente comparação e avaliação da produtividade dos juízes e das unidades judiciárias;\
 Criar uma plataforma que possibilite melhor visualização do cenário do sistema judicial brasileiro.
 
-Recursos necessários\
+#Recursos necessários\
 Dados do módulo de Justiça e Números do CNJ;\
 Shape file do IBGE.
 
-Limitações\
+#Limitações\
 Escolher um banco de dados que não fosse tão grande com a preocupação de que talvez o shiny online (shinyapps.io) não o suportasse.
 
-Dúvidas
+#Dúvidas
 
-Plano de açãoAtividades / Cronograma
+#Plano de açãoAtividades / Cronograma
 
 1. Compreensão da base de dados: até 29/03;
 2.  Determinar o desenho do dashboardinicial e a padronização de cores: até 05/04;

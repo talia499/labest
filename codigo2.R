@@ -146,86 +146,88 @@ ui <- shinyUI(
                                                  style="width:173%;")),
                               "Informação",
                               tabPanel("Variáveis",
-                                       mainPanel(p("Para este trabalho, os dados foram extraídos do módulo
+                                       div(style="overflow-y:scroll; max-height: 400px;width:720px;",
+                                              wellPanel(style="background-color:white;border:none;
+                                                  .row-fluid .span4{width: 26%;}",p("Para este trabalho, os dados foram extraídos do módulo
                                                            de Justiça e Números, do Conselho Nacional de Justiça,  
-                                                           e são correspondentes ao período de 2009 a 2019. As variáveis
-                                                           utilizadas estão descritas a seguir."),br(),
-                                                 strong(p("Assistência")),br(),
-                                                 p("Assistência: Assistência Judiciária Gratuita;"),
-                                                 p("Assistência/despesa: Assistência Judiciária Gratuita em relação à Despesa Total da Justiça;"),
-                                                 p("Assistência/habitantes: Assistência Judiciária Gratuita por 100.000 habitantes (R$)."),
-                                                 strong(p("Casos")),br(),
-                                                 #p(" - ;"),
-                                                 strong(p("Despesas")),br(),
-                                                 p("Receitas:Total de Receitas;"),
-                                                 p("Despesas:Despesas liquidadas no ano-base com bens de capital;"),
-                                                 p("Despesas de Pessoal:Despesas liquidadas no ano-base com Pessoal
-                                                   e Encargos do quadro ativo e inativo de cada Tribunal;"),
-                                                 p("Despesas de Pessoal Ativo:Despesas liquidadas no ano-base com Pessoal
-                                                   e Encargos do quadro ativo de cada Tribunal;"),
-                                                 p("Despesas de Pessoal Inativo:Despesas liquidadas no ano-base com Pessoal
-                                                   e Encargos do quadro inativo de cada Tribunal;"),
-                                                 p("Despesa Total da Justiça: Total das Despesas liquidadas no ano-base 
-                                                   com Recursos Humanos, despesas correntes e de capital;"),
-                                                 #p("dpjio: Despesa total (Exceto gastos com inativos e obras);"),
-                                                 p("Arrecadação/Despesa:Arrecadação com Custas e Emolumentos em relação à Despesa Total da Justiça;"),
-                                                 p("Despesa de Aquisição em TI e Comunicação: Despesas liquidadas no ano-base com aquisição de software
-                                                  e hardware de informática na área de TI e comunicação;"),
-                                                 p("Despesa de Custeio de TI e Comunicação: Despesas liquidadas no ano-base com serviços de
-                                                  informática, de tecnologia da informação, aquisição de software, manutenção de equipamentos e comunicação de dados;"),
-                                                 p("Despesa de Contratos de TI e Comunicação:Despesa com Contratos da Tecnologia de Informação e Comunicação da Justiça;"),
-                                                 p("Despesa com Estagiários: Despesas liquidadas no ano-base com Estagiários(bolsa, auxílios e seguros);"),
-                                                 p("Despesa com Terceirizados:: Despesas liquidadas no ano-base com a contratação de mão de obra terceirizada, exceto
-                                                   prestação de serviço de mão de obra eventual;"),
-                                                 p("Despesa com Benefícios: Despesas liquidadas no ano-base com benefícios para magistrados, servidores ativos, 
-                                                   inativos e instituidores de pensão;"),
-                                                 p("Outras Despesas com RH: Outras despesas indenizatórias e indiretas com Recursos Humanos do quadro ativo
-                                                   de cada Tribunal e suas respectivas unidades vinculadas, no ano-base;"),
-                                                 p("Cargos em Comissão: Total de cargos em comissão no quadro de pessoal de cada Tribunal e suas respectivas unidades
-                                                   vinculadas, no final do ano-base;"),
-                                                 p("Funções Comissionadas: Total de Funções Comissionadas Existentes;"),
-                                                 p("Despesa com RH: Despesa com pessoal, encargos, benefícios, terceirizados, estagiários e outras despesas indenizatórias e
-                                                 indiretas com recursos humanos de cada Tribunal e suas respectivas unidades vinculadas, no ano-base;"),
-                                                 p("Magistrados: Total de magistrados com atuação em cada Tribunal e suas respectivas unidades vinculadas, no período-base;"),
-                                                 p("Magistrados1: Total de magistrados com atuação no 1º grau, no período-base;"),
-                                                 p("Magistrados2: Total de magistrados em cada Tribunal no final período-base;"),
-                                                 p("Magistrados em JE: Total de magistrados com atuação nos Juizados Especiais, no final período-base;"),
-                                                 p("Magistrados em TR: Total de magistrados com atuação nas Turmas Recursais, no período-base;"),
-                                                 p("Cargos de Magistrado: Total de magistrado existentes, providos ou não, em cada Tribunal e suas respectivas unidades
-                                                   vinculadas, no final do período-base;"),
-                                                 p("Cargos de Magistrados1: Total de  cargos existentes de Magistrado, providos ou não, no 1º Grau da Justiça no
-                                                   final do período-base(inclusive Juízes Titulares e os Juízes Substitutos);"),
-                                                 p("Cargos de Magistrados2: Total cargos existentes de Magistrado no 2º Grau da Justiça no final do período-base,
-                                                   providos ou não. Excluem-se os Juízes Substitutos de 2º grau;"),
-                                                 p("Cargos de Magistrados em JE: Total de cargos existentes de Magistrado, providos ou não, nos Juizados Especiais exclusivos
-                                                   no final do período-base. Incluem-se os Juízes Titulares e os Juízes Substitutos;"),
-                                                 p("Servidores: Total de servidores efetivos, ocupantes apenas de cargo em comissão e os que ingressaram por cessão ou
-                                                 requisição em cada Tribunal e suas respectivas unidades vinculadas, no final do período-base"),
-                                                 p("Servidores Vagos: Total de cargos vagos de servidor;"),
-                                                 p("Conciliadores: Total de conciliadores do Tribunal e suas respectivas unidades vinculadas no final do período-base,
-                                                   independentemente na natureza da relação com o Tribunal;"),
-                                                 p("Estagiários: Total de estagiários do Tribunal e suas respectivas unidades vinculadas no final do período-base"),
-                                                 p("Juízes Leigos: Total de juízes leigos do Tribunal e suas respectivas unidades vinculadas no final do
-                                                   período –base, independentemente na natureza da relação com o Tribunal;"),
-                                                 p("Terceirizados: Total de trabalhadores contratados por empresas prestadoras de serviços (terceirizados) ao
-                                                   Tribunal e suas respectivas unidades vinculadas, no final do período-base;"),
-                                                 p("Magistrados Vagos:Número de cargos vagos de magistrado;"),
-                                                 strong(p("Produtividade")),br(),
-                                                 p("ProdutividadeM: Média de processos baixados por magistrado;"),
-                                                 p("ProdutividadeM1: Média de processos baixados por magistrado de 1º grau, no período-base (semestre);"),
-                                                 p("ProdutividadeM2: Média de processos baixados por magistrado de 2º grau, no período-base (semestre);"),
-                                                 p("ProdutividadeM em JE:Média de processos baixados por magistrado nos Juizados Especiais, no período-base (semestre);"),
-                                                 p("ProdutividadeM em TR: Média de processos baixados por magistrado de turma recursal,no período-base (semestre)"),
-                                                 #p(" "),
-                                                 strong(p("Demais Variáveis")),
-                                                 p("UF - Unidade da Federação abrangida;"),
-                                                 p("UF sede - Unidade da Federação sede;"),
-                                                 p("Tribunal - Tribunais  referentes a seus respectivos ramos de justiça;"),
-                                                 p("Justiça - Ramo de Justiça, dividida em Estadual, Federal, Superior, Trabalho, Militar Uniao;"),
-                                                 p("Ano - Ano de referência, de 2009 a 2019;"),
-                                                 p("Sigla - Sigla do Tribunal;"),
-                                                 p("Habitantes - Número de Habitantes."),
-                                                 style="width:173%;")),
+                                                                                    e são correspondentes ao período de 2009 a 2019. As variáveis
+                                                                                    utilizadas estão descritas a seguir."),br(),
+                                                        strong(p("Assistência")),br(),
+                                                        p("Assistência: Assistência Judiciária Gratuita;"),
+                                                        p("Assistência/despesa: Assistência Judiciária Gratuita em relação à Despesa Total da Justiça;"),
+                                                        p("Assistência/habitantes: Assistência Judiciária Gratuita por 100.000 habitantes (R$)."),
+                                                        strong(p("Casos")),br(),
+                                                        #p(" - ;"),
+                                                        strong(p("Despesas")),br(),
+                                                        p("Receitas:Total de Receitas;"),
+                                                        p("Despesas:Despesas liquidadas no ano-base com bens de capital;"),
+                                                        p("Despesas de Pessoal:Despesas liquidadas no ano-base com Pessoal
+                                                          e Encargos do quadro ativo e inativo de cada Tribunal;"),
+                                                        p("Despesas de Pessoal Ativo:Despesas liquidadas no ano-base com Pessoal
+                                                          e Encargos do quadro ativo de cada Tribunal;"),
+                                                        p("Despesas de Pessoal Inativo:Despesas liquidadas no ano-base com Pessoal
+                                                          e Encargos do quadro inativo de cada Tribunal;"),
+                                                        p("Despesa Total da Justiça: Total das Despesas liquidadas no ano-base 
+                                                          com Recursos Humanos, despesas correntes e de capital;"),
+                                                        #p("dpjio: Despesa total (Exceto gastos com inativos e obras);"),
+                                                        p("Arrecadação/Despesa:Arrecadação com Custas e Emolumentos em relação à Despesa Total da Justiça;"),
+                                                        p("Despesa de Aquisição em TI e Comunicação: Despesas liquidadas no ano-base com aquisição de software
+                                                          e hardware de informática na área de TI e comunicação;"),
+                                                        p("Despesa de Custeio de TI e Comunicação: Despesas liquidadas no ano-base com serviços de
+                                                          informática, de tecnologia da informação, aquisição de software, manutenção de equipamentos e comunicação de dados;"),
+                                                        p("Despesa de Contratos de TI e Comunicação:Despesa com Contratos da Tecnologia de Informação e Comunicação da Justiça;"),
+                                                        p("Despesa com Estagiários: Despesas liquidadas no ano-base com Estagiários(bolsa, auxílios e seguros);"),
+                                                        p("Despesa com Terceirizados:: Despesas liquidadas no ano-base com a contratação de mão de obra terceirizada, exceto
+                                                          prestação de serviço de mão de obra eventual;"),
+                                                        p("Despesa com Benefícios: Despesas liquidadas no ano-base com benefícios para magistrados, servidores ativos, 
+                                                          inativos e instituidores de pensão;"),
+                                                        p("Outras Despesas com RH: Outras despesas indenizatórias e indiretas com Recursos Humanos do quadro ativo
+                                                          de cada Tribunal e suas respectivas unidades vinculadas, no ano-base;"),
+                                                        p("Cargos em Comissão: Total de cargos em comissão no quadro de pessoal de cada Tribunal e suas respectivas unidades
+                                                          vinculadas, no final do ano-base;"),
+                                                        p("Funções Comissionadas: Total de Funções Comissionadas Existentes;"),
+                                                        p("Despesa com RH: Despesa com pessoal, encargos, benefícios, terceirizados, estagiários e outras despesas indenizatórias e
+                                                          indiretas com recursos humanos de cada Tribunal e suas respectivas unidades vinculadas, no ano-base;"),
+                                                        p("Magistrados: Total de magistrados com atuação em cada Tribunal e suas respectivas unidades vinculadas, no período-base;"),
+                                                        p("Magistrados1: Total de magistrados com atuação no 1º grau, no período-base;"),
+                                                        p("Magistrados2: Total de magistrados em cada Tribunal no final período-base;"),
+                                                        p("Magistrados em JE: Total de magistrados com atuação nos Juizados Especiais, no final período-base;"),
+                                                        p("Magistrados em TR: Total de magistrados com atuação nas Turmas Recursais, no período-base;"),
+                                                        p("Cargos de Magistrado: Total de magistrado existentes, providos ou não, em cada Tribunal e suas respectivas unidades
+                                                          vinculadas, no final do período-base;"),
+                                                        p("Cargos de Magistrados1: Total de  cargos existentes de Magistrado, providos ou não, no 1º Grau da Justiça no
+                                                          final do período-base(inclusive Juízes Titulares e os Juízes Substitutos);"),
+                                                        p("Cargos de Magistrados2: Total cargos existentes de Magistrado no 2º Grau da Justiça no final do período-base,
+                                                          providos ou não. Excluem-se os Juízes Substitutos de 2º grau;"),
+                                                        p("Cargos de Magistrados em JE: Total de cargos existentes de Magistrado, providos ou não, nos Juizados Especiais exclusivos
+                                                          no final do período-base. Incluem-se os Juízes Titulares e os Juízes Substitutos;"),
+                                                        p("Servidores: Total de servidores efetivos, ocupantes apenas de cargo em comissão e os que ingressaram por cessão ou
+                                                          requisição em cada Tribunal e suas respectivas unidades vinculadas, no final do período-base"),
+                                                        p("Servidores Vagos: Total de cargos vagos de servidor;"),
+                                                        p("Conciliadores: Total de conciliadores do Tribunal e suas respectivas unidades vinculadas no final do período-base,
+                                                          independentemente na natureza da relação com o Tribunal;"),
+                                                        p("Estagiários: Total de estagiários do Tribunal e suas respectivas unidades vinculadas no final do período-base"),
+                                                        p("Juízes Leigos: Total de juízes leigos do Tribunal e suas respectivas unidades vinculadas no final do
+                                                          período –base, independentemente na natureza da relação com o Tribunal;"),
+                                                        p("Terceirizados: Total de trabalhadores contratados por empresas prestadoras de serviços (terceirizados) ao
+                                                          Tribunal e suas respectivas unidades vinculadas, no final do período-base;"),
+                                                        p("Magistrados Vagos:Número de cargos vagos de magistrado;"),
+                                                        strong(p("Produtividade")),br(),
+                                                        p("ProdutividadeM: Média de processos baixados por magistrado;"),
+                                                        p("ProdutividadeM1: Média de processos baixados por magistrado de 1º grau, no período-base (semestre);"),
+                                                        p("ProdutividadeM2: Média de processos baixados por magistrado de 2º grau, no período-base (semestre);"),
+                                                        p("ProdutividadeM em JE:Média de processos baixados por magistrado nos Juizados Especiais, no período-base (semestre);"),
+                                                        p("ProdutividadeM em TR: Média de processos baixados por magistrado de turma recursal,no período-base (semestre)"),
+                                                        #p(" "),
+                                                        strong(p("Demais Variáveis")),
+                                                        p("UF - Unidade da Federação abrangida;"),
+                                                        p("UF sede - Unidade da Federação sede;"),
+                                                        p("Tribunal - Tribunais  referentes a seus respectivos ramos de justiça;"),
+                                                        p("Justiça - Ramo de Justiça, dividida em Estadual, Federal, Superior, Trabalho, Militar Uniao;"),
+                                                        p("Ano - Ano de referência, de 2009 a 2019;"),
+                                                        p("Sigla - Sigla do Tribunal;"),
+                                                        p("Habitantes - Número de Habitantes."),
+                                                        style="width:173%;"))),
                               tabPanel("Referências",
                                        mainPanel(p(strong("Base de Dados:")," Justiça e Números",
                                                    a(href = "https://www.cnj.jus.br/wp-content/uploads/2020/08/25-Ago-2020.v2.zip",

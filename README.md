@@ -25,7 +25,7 @@ Escolher um banco de dados que não fosse tão grande com a preocupação de que
 
 # Dúvidas
 
-# Plano de açãoAtividades / Cronograma
+# Plano de ação: Atividades / Cronograma
 
 1. Compreensão da base de dados: até 29/03;
 2.  Determinar o desenho do dashboardinicial e a padronização de cores: até 05/04;

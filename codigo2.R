@@ -1,51 +1,3 @@
-library(readr)
-library(shiny)
-library(ggplot2)
-library(dplyr)
-library(tidyverse)
-library(ggrepel)
-library(shinydashboard)
-library(plotly)
-library(geojsonio)
-library(leaflet)
-library(shinydashboardPlus)
-mycol<- c( "#D94800","#458A00", "#8A8A00", "#005C8A","#CC0074","darkcyan")
-states <- geojson_read("https://raw.githubusercontent.com/codeforamerica/click_that_hood/master/public/data/brazil-states.geojson",  what = "sp")
-dados<- read.csv2("JN_25-Ago-2020.csv", header=T)
-tpcpm <- dados$tpcpm[dados$tpcpm != 'nd']
-tpcpm <- str_replace_all(string = tpcpm, pattern = ',', replacement = '.')
-tpcpm <- as.numeric(tpcpm)
-t1 <- data.frame(tpcpm = tpcpm)
-tpsentc1jem <- dados$tpsentc1jem[dados$tpsentc1jem != 'nd']
-tpsentc1jem <- str_replace_all(string = tpsentc1jem, pattern = ',', replacement = '.')
-tpsentc1jem <- as.numeric(tpsentc1jem)
-t2 <- data.frame(tpsentc1jem = tpsentc1jem)
-despesas=dados[,c('uf_abrangida','uf_sede','dsc_tribunal',"justica",'ano',"sigla","h1","receitas",
-                  'dk','dpe','dpea','dpei','dpj','dpjio','i','dinf1','dinf2','dinf3',"dpe",'dest',
-                  'dter','dben','dip',"cc","tfc",'drh',"mag","mag1",'mag2','magje','magtr',"mage",
-                  'mage1','mage2','mageje','magtr','ts','tvefet','tfauxc', 'tfauxe',
-                  'tfauxjl', 'tfauxt',"magv")]
-
-casos=dados[,c("justica","ano",'uf_abrangida','uf_sede',"sigla","h1",'cn','tbaix',
-               'cnncrim','cnelet','cncrim','sent1','dec2','cnncrim',
-               'cnccrim1','cnccrimje','cncrim2','cncrimtr',
-               'cncncrim1','cncncrimje','cnncrim2','cnncrimtr',
-               'cnex1','cnexje',
-               'cnextfisc1',
-               'cnextje','cnext1',
-               'exejud1','exejudje',
-               'exejudncrim1','exejudncrimje','exejudcrimpl1','exejudcrimnpl1','exejudcrimnplje')]
-
-
-produtividade=dados[,c('uf_abrangida','uf_sede','dsc_tribunal',"justica",'ano',"sigla","h1",
-                       'ipm','ipm1','ipm2','ipmje','ipmtr',"ips",
-                       'ipsjud','ipsjud1','ipsjud2','ipsjudstm','ipsjudtr',
-                       'tccrim','tcex1','tcexje','tcncrim',
-                       'tccrim','tcncrim','tcex1','tcexje')]
-assistencia=dados[,c('uf_abrangida','uf_sede','dsc_tribunal',"justica",'ano',"sigla",
-                     'jg','a1','a2')]
-##########################################################################################3
-
 ui <- shinyUI(
   navbarPage("CNJ",tabPanel("Home",icon = icon("home", lib =  "glyphicon"),
                             tags$style(HTML("
@@ -299,7 +251,7 @@ ui <- shinyUI(
                                          p("Pedro Gabriel Moura"),
                                          p("Talia Alves Xavier")
                                        ))
-                                       ),style="width: 650px;position:absolute;left:195px;bottom:-150px;;
+                                                     ),style="width: 650px;position:absolute;left:195px;bottom:-150px;;
                        text-align: justify;"),
                             div(style="position:absolute; left:0px;bottom:-300px;
                                 border-top-style: ridge;border-top-color: #002f54;width:2000px;",
@@ -307,7 +259,7 @@ ui <- shinyUI(
                                             width="100px"),style="position:relative; left:0px;bottom:20px;"),
                                     div(img(src="https://cnj.jus.br/cnj15anos/images/marca-cnj-preta.png",width="140px"),
                                         style="position:relative; left:110px;bottom:70px;")))
-                              ),
+                                                     ),
              #######################################################################           
              tabPanel("Insumos",icon=icon("coins"),tags$style(type="text/css",
                                                               ".shiny-output-error { visibility: hidden; }",
@@ -411,6 +363,10 @@ ui <- shinyUI(
                                  )),
                         ##############################################
                         tabPanel("Tempo de Processo",
+                                 inputPanel(
+                                   selectInput("ano3","Ano",choices=c("2015","2016","2017","2018","2019"))
+                                   
+                                 ),
                                  mainPanel(
                                    div(plotOutput("tp1"),
                                        style="width:600px ;position: relative;left: 0px;bottom:-30px;"),
@@ -421,7 +377,7 @@ ui <- shinyUI(
                                    div(plotOutput("tp4"),
                                        style="width:600px ;position: relative;left:650px;bottom:760px;")
                                  )
-                                 ))),
+                        ))),
              #####################################################
              tabPanel("Acesso à Justiça",icon=icon("globe"),
                       tags$style(type="text/css",
@@ -436,7 +392,7 @@ ui <- shinyUI(
                             style="width:750px;position: relative;left:500px;bottom:350px;"))
              )
              
-                            )
+                                                     )
                             )
 ########################################
 server <- function(input, output,session) {
@@ -476,8 +432,8 @@ server <- function(input, output,session) {
     )
   })
   #
- 
- 
+  
+  
   ###################################################################
   
   react1=reactive({
@@ -895,13 +851,19 @@ server <- function(input, output,session) {
     
   })
   output$tp1=renderPlot({
-    ggplot(data = t1, aes(x=tpcpm)) + geom_histogram(fill=mycol[3], color='white')+
+    tpcpm=dados%>%filter(ano %in% input$ano3)%>%select(tpcpm,ano)%>%filter(tpcpm!="nd")%>%
+      mutate_all(funs(gsub(",", ".", .) ))%>%
+      mutate_all(funs(round(as.numeric(.),3)))
+    ggplot(data = tpcpm, aes(x=tpcpm)) + geom_histogram(fill=mycol[3], color='white')+
       theme(legend.position="bottom")+labs(colour=" ")+
       ggtitle("Distribuição do tempo pendente")+
       labs(x="Tempo",y="Frequência")
   })
   output$tp2=renderPlot({
-    ggplot(data = t1, aes(x=tpcpm, y =' ')) + 
+    tpcpm=dados%>%filter(ano %in% input$ano3)%>%select(tpcpm,ano)%>%filter(tpcpm!="nd")%>%
+      mutate_all(funs(gsub(",", ".", .) ))%>%
+      mutate_all(funs(round(as.numeric(.),3)))
+    ggplot(data = tpcpm, aes(x=tpcpm, y =' ')) + 
       geom_violin(fill=mycol[3], color='gray', alpha=0.4) +
       geom_boxplot(fill=mycol[3], color='black')+
       theme(legend.position="bottom")+labs(colour=" ")+
@@ -909,15 +871,22 @@ server <- function(input, output,session) {
       labs(x="Tempo",y="Frequência")
     
   })
+  
   output$tp3=renderPlot({
-    ggplot(data = t2, aes(x=tpsentc1jem)) + geom_histogram(fill=mycol[3], color='white')+
+    tpsentc1jem=dados%>%filter(ano %in% input$ano3)%>%select(tpsentc1jem,ano)%>%filter(tpsentc1jem!="nd")%>%
+      mutate_all(funs(gsub(",", ".", .) ))%>%
+      mutate_all(funs(round(as.numeric(.),3)))
+    ggplot(data = tpsentc1jem, aes(x=tpsentc1jem)) + geom_histogram(fill=mycol[3], color='white')+
       theme(legend.position="bottom")+labs(colour=" ")+
       ggtitle("Distribuição do tempo de sentença em primeiro grau")+
       labs(x="Tempo",y="Frequência")
   })
   
   output$tp4=renderPlot({
-    ggplot(data = t2, aes(x=tpsentc1jem, y =' ')) + 
+    tpsentc1jem=dados%>%filter(ano %in% input$ano3)%>%select(tpsentc1jem,ano)%>%filter(tpsentc1jem!="nd")%>%
+      mutate_all(funs(gsub(",", ".", .) ))%>%
+      mutate_all(funs(round(as.numeric(.),3)))
+    ggplot(data = tpsentc1jem, aes(x=tpsentc1jem, y =' ')) + 
       geom_violin(fill=mycol[3], color='gray', alpha=0.4) +
       geom_boxplot(fill=mycol[3], color='black')+
       theme(legend.position="bottom")+labs(colour=" ")+
@@ -925,7 +894,8 @@ server <- function(input, output,session) {
       labs(x="Tempo",y="Frequência")
     
   })
-  
 }
+  
+
 
 shinyApp(ui, server)

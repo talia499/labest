@@ -433,7 +433,8 @@ ui <- shinyUI(
                                  ".shiny-output-error:before { visibility: hidden; }"),
                       inputPanel(
                         selectInput("ano4","Ano",choices = unique(dados$ano))),
-                      mainPanel(
+                      mainPanel(div(h4("Assistência Gratuita"),
+                                    style="position: relative;left:0px;bottom:-70px;"),
                         div(leafletOutput("aj1"),
                             style="width:500px;position: relative;left:0px;bottom:-70px;"),
                         div(plotlyOutput("aj2"),

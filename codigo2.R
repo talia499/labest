@@ -149,7 +149,7 @@ ui <- shinyUI(
                                                  p("Criar uma plataforma que possibilite melhor 
                                                    visualização do cenário do sistema judicial brasileiro."),
                                                  style="width:173%;")),
-                              "Infromação",
+                              "Informação",
                               tabPanel("Variáveis",
                                        div(style="overflow-y:scroll; max-height: 400px;width:720px;",
                                            wellPanel(style="background-color:white;border:none;
@@ -273,7 +273,7 @@ ui <- shinyUI(
                                                      p("Sigla - Sigla do Tribunal;"),
                                                      p("Habitantes - Número de Habitantes."),
                                                      style="width:173%;"))),
-                              tabPanel("Referencias",
+                              tabPanel("Referências",
                                        mainPanel(p(strong("Base de Dados:")," Justiça e Números",
                                                    a(href = "https://www.cnj.jus.br/wp-content/uploads/2020/08/25-Ago-2020.v2.zip",
                                                      target ="_blank","[link]")),br(),br(),
@@ -322,7 +322,7 @@ ui <- shinyUI(
                                                             'Sudeste'=list("ES","MG","RJ","SP"),
                                                             'Sul'=list("PR","SC","RS"))
                         ),
-                        selectInput("ano","Ano",choices = unique(dados$ano))
+                        selectInput("ano","Ano","2019",choices = unique(dados$ano))
                         
                       ),
                       #################################
@@ -374,7 +374,7 @@ ui <- shinyUI(
                                                              `Centro-Oeste` = list("GO","MT","MS","DF"),
                                                              `Sudeste`=list("ES","MG","RJ","SP"),
                                                              `Sul`=list("PR","SC","RS"))),
-                        selectInput("ano1","Ano",choices = unique(dados$ano))
+                        selectInput("ano1","Ano","2019",choices = unique(dados$ano))
                         
                       ),mainPanel(
                         div(plotOutput("l1"),
@@ -403,7 +403,7 @@ ui <- shinyUI(
                                                                                    `Centro-Oeste` = list("GO","MT","MS","DF"),
                                                                                    `Sudeste`=list("ES","MG","RJ","SP"),
                                                                                    `Sul`=list("PR","SC","RS"))),
-                                              selectInput("ano2","Ano",choices = unique(dados$ano))),
+                                              selectInput("ano2","Ano","2019",choices = unique(dados$ano))),
                                  mainPanel(div(plotOutput("i2"),
                                                style="width:700px;position: relative;left:-130px;bottom:-50px;"),
                                            div(plotlyOutput('i1'),
@@ -412,7 +412,7 @@ ui <- shinyUI(
                         ##############################################
                         tabPanel("Tempo de Processo",
                                  inputPanel(
-                                   selectInput("ano3","Ano",choices=c("2015","2016","2017","2018","2019"))
+                                   selectInput("ano3","Ano","2019",choices=c("2015","2016","2017","2018","2019"))
                                    
                                  ),
                                  mainPanel(

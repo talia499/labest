@@ -9,11 +9,17 @@ library(plotly)
 library(geojsonio)
 library(leaflet)
 library(shinydashboardPlus)
-mycol<- c( "#00a2e8","#00d699","#e4572e","#0096aa", "#002f54", "#00585e")
+mycol<- c( "#D94800","#458A00", "#8A8A00", "#005C8A","#CC0074","darkcyan")
 states <- geojson_read("https://raw.githubusercontent.com/codeforamerica/click_that_hood/master/public/data/brazil-states.geojson",  what = "sp")
-dados<- read.csv2("C:/Users/gabri/Downloads/JN_25-Ago-2020.csv", header=T)
-dados$sigla=(substr(dados$sigla,1,nchar(dados$sigla)-2))
-
+dados<- read.csv2("JN_25-Ago-2020.csv", header=T)
+tpcpm <- dados$tpcpm[dados$tpcpm != 'nd']
+tpcpm <- str_replace_all(string = tpcpm, pattern = ',', replacement = '.')
+tpcpm <- as.numeric(tpcpm)
+t1 <- data.frame(tpcpm = tpcpm)
+tpsentc1jem <- dados$tpsentc1jem[dados$tpsentc1jem != 'nd']
+tpsentc1jem <- str_replace_all(string = tpsentc1jem, pattern = ',', replacement = '.')
+tpsentc1jem <- as.numeric(tpsentc1jem)
+t2 <- data.frame(tpsentc1jem = tpsentc1jem)
 despesas=dados[,c('uf_abrangida','uf_sede','dsc_tribunal',"justica",'ano',"sigla","h1","receitas",
                   'dk','dpe','dpea','dpei','dpj','dpjio','i','dinf1','dinf2','dinf3',"dpe",'dest',
                   'dter','dben','dip',"cc","tfc",'drh',"mag","mag1",'mag2','magje','magtr',"mage",
@@ -39,7 +45,6 @@ produtividade=dados[,c('uf_abrangida','uf_sede','dsc_tribunal',"justica",'ano',"
 assistencia=dados[,c('uf_abrangida','uf_sede','dsc_tribunal',"justica",'ano',"sigla",
                      'jg','a1','a2')]
 ##########################################################################################3
-
 
 ui <- shinyUI(
   navbarPage("CNJ",tabPanel("Home",icon = icon("home", lib =  "glyphicon"),
@@ -99,7 +104,7 @@ ui <- shinyUI(
                                   caption = h3("Acesso à Justiça Gratuita",style="position: relative;bottom:180px;color:red;"),
                                   div(style="text-align: center;background-color: rgba(10,23,55,0.5);",
                                       img(src = "https://guimaraes-adv.com/wp-content/uploads/2018/09/25632879542.jpg",
-                                          onclick = "fakeClick('Acesso a Justiça')",width="750px",height="300px"))
+                                          onclick = "fakeClick('Acesso à Justiça')",width="750px",height="300px"))
                                 )
                                 
                               ),style="width: 148%;
@@ -127,7 +132,7 @@ ui <- shinyUI(
                                                  demandas, com a atual produtividade de magistrados
                                                  e servidores, seriam necessários aproximadamente 3 
                                                  anos de trabalho para zerar o estoque', essa afirmação 
-                                                 é preocupante, pois agrava a sensação de ineficiência 
+                                                 é preocupante pois, agrava a sensação de ineficiência 
                                                  do Poder Judiciário, nesse sentido, objetiva-se desenvolver
                                                  uma plataforma que permita analisar a produtividade de 
                                                  componentes desse setor. ",
@@ -137,138 +142,138 @@ ui <- shinyUI(
                                                           disciplina Laboratório em Estatística, do Departamento 
                                                           de Estatística da Universidade de Brasília (UnB) com 
                                                           o Conselho Nacional de Justiça (CNJ) com os objetivos:")),br(),
-                                                 p("Tornar o acesso aos dados do módulo de Justiça e Números do 
+                                                 p("Tornar o acesso aos dados do módulo de Produtividade Mensal do 
                                                    CNJ mais acessível, criando novos mecanismos de disponibilização 
                                                    dos dados e consequentemente comparação e avaliação da produtividade 
                                                    dos juízes e das unidades judiciárias"),br(),
                                                  p("Criar uma plataforma que possibilite melhor 
                                                    visualização do cenário do sistema judicial brasileiro."),
                                                  style="width:173%;")),
-                              "Informação",
+                              "Infromação",
                               tabPanel("Variáveis",
                                        div(style="overflow-y:scroll; max-height: 400px;width:720px;",
-                                              wellPanel(style="background-color:white;border:none;
-                                                  .row-fluid .span4{width: 26%;}",p("Para este trabalho, os dados foram extraídos do módulo
-                                                           de Justiça e Números, do Conselho Nacional de Justiça,  
-                                                                                    e são correspondentes ao período de 2009 a 2019. As variáveis
-                                                                                    utilizadas estão descritas a seguir."),br(),
-                                                        strong(p("Assistência")),br(),
-                                                        p("Assistência: Assistência Judiciária Gratuita;"),
-                                                        p("Assistência/despesa: Assistência Judiciária Gratuita em relação à Despesa Total da Justiça;"),
-                                                        p("Assistência/habitantes: Assistência Judiciária Gratuita por 100.000 habitantes (R$)."),
-                                                        strong(p("Casos")),
-                                                        p("Casos Novos: Processos protocolizados e interpostos para julgamento no período-base;"),
-                                                        p("Processos Baixados: Total de processos baixados no período-base;"),
-                                                        p("Casos Novos NC: Total de Casos Novos Não-Criminais no período-base;"),
-                                                        p("Casos Novos Eletrônicos: Total de processos eletrônicos que ingressaram ou foram protocolizados no período-base (semestre);"),
-                                                        p("Casos Novos Criminais: Total de Casos Novos Criminais no período-base;"),
-                                                        p("Sentenças 1: Total de Sentenças no 1º Grau no período-base (semestre);"),
-                                                        p("Decisões2: Total de Decisões que põem fim à relação processual no 2º Grau no período-base (semestre);"),
-                                                        p("Casos Novos CC1: Processos criminais de conhecimento, cautelares, mandamentais e ações constitucionais que ingressaram 
-                                                          ou foram protocolizados no 1º Grau no período-base (semestre), incluídos os embargos de terceiros;"),
-                                                        p("Casos Novos CJE: Processos criminais de conhecimento, cautelares, mandamentais e ações constitucionais que ingressaram 
-                                                           ou foram protocolizados nos Juizados Especiais no período-base (semestre), incluídos os embargos de terceiros;"),
-                                                        p("Casos Novos Criminais 2: Total  de Casos Novos Criminais no 2º Grau no período-base;"),
-                                                        p("Casos Novos Criminais TR: Total de Casos Novos Criminais nas Turmas Recursais no período-base;"),
-                                                        p("Casos Novos NCC: Processos não-criminais de conhecimento, cautelares, mandamentais e ações constitucionais que ingressaram
-                                                          ou foram protocolizados no 1º Grau, no período-base (mês);"),
-                                                        p("Casos Novos NCCJE: Processos não-criminais de conhecimento, cautelares, mandamentais e ações constitucionais que ingressaram ou foram 
-                                                        protocolizados no Juizado Especial no período-base (mês), incluídos os embargos do devedor na execução de título extrajudicial e os embargos de terceiros;"),
-                                                        p("Casos Novos NC2: Total de Casos Novos Não-Criminais no 2º Grau no período-base;"),
-                                                        p("Casos Novos NCTR: Total de Casos Novos Não-Criminais nas Turmas Recursais no período-base;"),
-                                                        p("Casos Novos Execução 1: Total de casos novos de execução de títulos judiciais e extrajudiciais, que iniciaram no 1º Grau, no período-base (semestre);"),
-                                                        p("Casos Novos Execução JE: Total de casos novos de execução judicial e extrajudicial que ingressaram ou foram protocolizados nos Juizados Especiais,
-                                                          no período-base (semestre);"),
-                                                        p("Casos Novos Execução Fiscal 1: Total de execuções fiscais que ingressaram ou foram protocolizadas no 1º Grau, no período-base (semestre);"),
-                                                        p("Casos Novos Execução TJE: Total de execuções de títulos executivos extrajudiciais que ingressaram ou foram protocolizadas nos Juizados Especiais, no período-base (semestre);"),
-                                                        p("Casos Novos Execução T1: Total de casos novos de execução de títulos executivos extrajudiciais, que iniciaram no 1º Grau, no período-base (semestre);"),
-                                                        p("Casos Novos Execução Judicial 1: Total de casos novos de execução judicial, que iniciaram no 1º Grau, no período-base (semestre);"),
-                                                        p("Casos Novos Execução Judicial JE: Total de  casos novos de execução de título judicial que ingressaram ou foram protocolizados nos Juizados Especiais, no período-base (semestre);"),
-                                                        p("Execuções Judiciais 1: Processos de execução de título judicial ou de cumprimento de sentença iniciados no 1º grau, no período-base (semestre);"),
-                                                        p("Execuções Judiciais JE: Processos de execução de título judicial ou cumprimento de sentença iniciados nos Juizados Especiais, exceto execuções penais, no período-base (semestre);"),
-                                                        p("Execuções PP1: Processos de execução de penas privativas de liberdade, inclusive de execuções provisórias, iniciados no 1º grau no período-base (mês);"),
-                                                        p("Execuções PNP1:  Processos de execução de penas não-privativas de liberdade iniciados no 1º grau no período-base (mês);"),
-                                                        p("Execuções PNPJE: Processos de execução de penas não-privativas de liberdade iniciados no Juizado Especial, no período-base (mês)."),br(),
-                                                        strong(p("Despesas")),
-                                                        p("Receitas:Total de Receitas;"),
-                                                        p("Despesas:Despesas liquidadas no ano-base com bens de capital;"),
-                                                        p("Despesas de Pessoal:Despesas liquidadas no ano-base com Pessoal
-                                                             e Encargos do quadro ativo e inativo de cada Tribunal;"),
-                                                        p("Despesas de Pessoal Ativo:Despesas liquidadas no ano-base com Pessoal
-                                                             e Encargos do quadro ativo de cada Tribunal;"),
-                                                        p("Despesas de Pessoal Inativo:Despesas liquidadas no ano-base com Pessoal
-                                                             e Encargos do quadro inativo de cada Tribunal;"),
-                                                        p("Despesa Total da Justiça: Total das Despesas liquidadas no ano-base 
-                                                             com Recursos Humanos, despesas correntes e de capital;"),
-                                                        p("Despesa total 2: Total das Despesas liquidadas no ano-base, exceto gastos com inativos e obras;"),
-                                                        p("Arrecadação/Despesa:Arrecadação com Custas e Emolumentos em relação à Despesa Total da Justiça;"),
-                                                        p("Despesa de Aquisição em TI e Comunicação: Despesas liquidadas no ano-base com aquisição de software
-                                                             e hardware de informática na área de TI e comunicação;"),
-                                                        p("Despesa de Custeio de TI e Comunicação: Despesas liquidadas no ano-base com serviços de
-                                                             informática, de tecnologia da informação, aquisição de software, manutenção de equipamentos e comunicação de dados;"),
-                                                        p("Despesa de Contratos de TI e Comunicação:Despesa com Contratos da Tecnologia de Informação e Comunicação da Justiça;"),
-                                                        p("Despesa com Estagiários: Despesas liquidadas no ano-base com Estagiários(bolsa, auxílios e seguros);"),
-                                                        p("Despesa com Terceirizados:: Despesas liquidadas no ano-base com a contratação de mão de obra terceirizada, exceto
-                                                             prestação de serviço de mão de obra eventual;"),
-                                                        p("Despesa com Benefícios: Despesas liquidadas no ano-base com benefícios para magistrados, servidores ativos, 
-                                                             inativos e instituidores de pensão;"),
-                                                        p("Outras Despesas com RH: Outras despesas indenizatórias e indiretas com Recursos Humanos do quadro ativo
-                                                             de cada Tribunal e suas respectivas unidades vinculadas, no ano-base;"),
-                                                        p("Cargos em Comissão: Total de cargos em comissão no quadro de pessoal de cada Tribunal e suas respectivas unidades
-                                                             vinculadas, no final do ano-base;"),
-                                                        p("Funções Comissionadas: Total de Funções Comissionadas Existentes;"),
-                                                        p("Despesa com RH: Despesa com pessoal, encargos, benefícios, terceirizados, estagiários e outras despesas indenizatórias e
-                                                             indiretas com recursos humanos de cada Tribunal e suas respectivas unidades vinculadas, no ano-base;"),
-                                                        p("Magistrados: Total de magistrados com atuação em cada Tribunal e suas respectivas unidades vinculadas, no período-base;"),
-                                                        p("Magistrados1: Total de magistrados com atuação no 1º grau, no período-base;"),
-                                                        p("Magistrados2: Total de magistrados em cada Tribunal no final período-base;"),
-                                                        p("Magistrados em JE: Total de magistrados com atuação nos Juizados Especiais, no final período-base;"),
-                                                        p("Magistrados em TR: Total de magistrados com atuação nas Turmas Recursais, no período-base;"),
-                                                        p("Cargos de Magistrado: Total de magistrado existentes, providos ou não, em cada Tribunal e suas respectivas unidades
-                                                             vinculadas, no final do período-base;"),
-                                                        p("Cargos de Magistrados1: Total de  cargos existentes de Magistrado, providos ou não, no 1º Grau da Justiça no
-                                                             final do período-base(inclusive Juízes Titulares e os Juízes Substitutos);"),
-                                                        p("Cargos de Magistrados2: Total cargos existentes de Magistrado no 2º Grau da Justiça no final do período-base,
-                                                             providos ou não. Excluem-se os Juízes Substitutos de 2º grau;"),
-                                                        p("Cargos de Magistrados em JE: Total de cargos existentes de Magistrado, providos ou não, nos Juizados Especiais exclusivos
-                                                             no final do período-base. Incluem-se os Juízes Titulares e os Juízes Substitutos;"),
-                                                        p("Servidores: Total de servidores efetivos, ocupantes apenas de cargo em comissão e os que ingressaram por cessão ou
-                                                             requisição em cada Tribunal e suas respectivas unidades vinculadas, no final do período-base"),
-                                                        p("Servidores Vagos: Total de cargos vagos de servidor;"),
-                                                        p("Conciliadores: Total de conciliadores do Tribunal e suas respectivas unidades vinculadas no final do período-base,
-                                                             independentemente na natureza da relação com o Tribunal;"),
-                                                        p("Estagiários: Total de estagiários do Tribunal e suas respectivas unidades vinculadas no final do período-base"),
-                                                        p("Juízes Leigos: Total de juízes leigos do Tribunal e suas respectivas unidades vinculadas no final do
-                                                             período –base, independentemente na natureza da relação com o Tribunal;"),
-                                                        p("Terceirizados: Total de trabalhadores contratados por empresas prestadoras de serviços (terceirizados) ao
-                                                             Tribunal e suas respectivas unidades vinculadas, no final do período-base;"),
-                                                        p("Magistrados Vagos:Número de cargos vagos de magistrado;"),br(),
-                                                        strong(p("Produtividade")),
-                                                        p("Produtividade M: Média de processos baixados por magistrado;"),
-                                                        p("Produtividade M1: Média de processos baixados por magistrado de 1º grau, no período-base (semestre);"),
-                                                        p("Produtividade M2: Média de processos baixados por magistrado de 2º grau, no período-base (semestre);"),
-                                                        p("Produtividade M: em JE:Média de processos baixados por magistrado nos Juizados Especiais, no período-base (semestre);"),
-                                                        p("Produtividade M: em TR: Média de processos baixados por magistrado de turma recursal,no período-base (semestre)"),
-                                                        p("Produtividade S: Média de processos baixados por servidor;"),
-                                                        p("Produtividade SJ: Média de processos baixados por servidor da área judiciária;"),
-                                                        p("Produtividade SJ1: Média de processos baixados por servidor da área judiciária no 1º grau, no período-base (semestre);"),
-                                                        p("Produtividade SJ2: Média de processos baixados por servidor da área judiciária no 2º grau, no período-base (semestre);"),
-                                                        p("Produtividade SJSTM: Média de processos baixados por servidor da área Judiciária no STM;"),
-                                                        p("Produtividade SJTR: Média de processos baixados por servidor da área judiciária na turma recursal, no período-base (semestre);"),
-                                                        p("Congestionamento: Taxa de Congestionamento Criminal no período-base;"),
-                                                        p("Congestionamento E1: Taxa de congestionamento na fase de execução do 1º Grau, no período-base (semestre);"),
-                                                        p("Congestionamento EJE: Taxa de congestionamento na fase de execução dos Juizados Especiais, no período-base (semestre);"),
-                                                        p("Congestionamento NC: Taxa de Congestionamento Não-Criminal no período-base;"),br(),
-                                                        strong(p("Demais Variáveis")),
-                                                        p("UF - Unidade da Federação abrangida;"),
-                                                        p("UF sede - Unidade da Federação sede;"),
-                                                        p("Tribunal - Tribunais  referentes a seus respectivos ramos de justiça;"),
-                                                        p("Justiça - Ramo de Justiça, dividida em Estadual, Federal, Superior, Trabalho, Militar Uniao;"),
-                                                        p("Ano - Ano de referência, de 2009 a 2019;"),
-                                                        p("Sigla - Sigla do Tribunal;"),
-                                                        p("Habitantes - Número de Habitantes."),
-                                                        style="width:173%;"))),
-                              tabPanel("Referências",
+                                           wellPanel(style="background-color:white;border:none;
+                                                     .row-fluid .span4{width: 26%;}",p("Para este trabalho, os dados foram extraídos do módulo
+                                                                                       de Justiça e Números, do Conselho Nacional de Justiça,  
+                                                                                       e são correspondentes ao período de 2009 a 2019. As variáveis
+                                                                                       utilizadas estão descritas a seguir."),br(),
+                                                     strong(p("Assistência")),br(),
+                                                     p("Assistência: Assistência Judiciária Gratuita;"),
+                                                     p("Assistência/despesa: Assistência Judiciária Gratuita em relação à Despesa Total da Justiça;"),
+                                                     p("Assistência/habitantes: Assistência Judiciária Gratuita por 100.000 habitantes (R$)."),
+                                                     strong(p("Casos")),
+                                                     p("Casos Novos: Processos protocolizados e interpostos para julgamento no período-base;"),
+                                                     p("Processos Baixados: Total de processos baixados no período-base;"),
+                                                     p("Casos Novos NC: Total de Casos Novos Não-Criminais no período-base;"),
+                                                     p("Casos Novos Eletrônicos: Total de processos eletrônicos que ingressaram ou foram protocolizados no período-base (semestre);"),
+                                                     p("Casos Novos Criminais: Total de Casos Novos Criminais no período-base;"),
+                                                     p("Sentenças 1: Total de Sentenças no 1º Grau no período-base (semestre);"),
+                                                     p("Decisões2: Total de Decisões que põem fim à relação processual no 2º Grau no período-base (semestre);"),
+                                                     p("Casos Novos CC1: Processos criminais de conhecimento, cautelares, mandamentais e ações constitucionais que ingressaram 
+                                                       ou foram protocolizados no 1º Grau no período-base (semestre), incluídos os embargos de terceiros;"),
+                                                     p("Casos Novos CJE: Processos criminais de conhecimento, cautelares, mandamentais e ações constitucionais que ingressaram 
+                                                       ou foram protocolizados nos Juizados Especiais no período-base (semestre), incluídos os embargos de terceiros;"),
+                                                     p("Casos Novos Criminais 2: Total  de Casos Novos Criminais no 2º Grau no período-base;"),
+                                                     p("Casos Novos Criminais TR: Total de Casos Novos Criminais nas Turmas Recursais no período-base;"),
+                                                     p("Casos Novos NCC: Processos não-criminais de conhecimento, cautelares, mandamentais e ações constitucionais que ingressaram
+                                                       ou foram protocolizados no 1º Grau, no período-base (mês);"),
+                                                     p("Casos Novos NCCJE: Processos não-criminais de conhecimento, cautelares, mandamentais e ações constitucionais que ingressaram ou foram 
+                                                       protocolizados no Juizado Especial no período-base (mês), incluídos os embargos do devedor na execução de título extrajudicial e os embargos de terceiros;"),
+                                                     p("Casos Novos NC2: Total de Casos Novos Não-Criminais no 2º Grau no período-base;"),
+                                                     p("Casos Novos NCTR: Total de Casos Novos Não-Criminais nas Turmas Recursais no período-base;"),
+                                                     p("Casos Novos Execução 1: Total de casos novos de execução de títulos judiciais e extrajudiciais, que iniciaram no 1º Grau, no período-base (semestre);"),
+                                                     p("Casos Novos Execução JE: Total de casos novos de execução judicial e extrajudicial que ingressaram ou foram protocolizados nos Juizados Especiais,
+                                                       no período-base (semestre);"),
+                                                     p("Casos Novos Execução Fiscal 1: Total de execuções fiscais que ingressaram ou foram protocolizadas no 1º Grau, no período-base (semestre);"),
+                                                     p("Casos Novos Execução TJE: Total de execuções de títulos executivos extrajudiciais que ingressaram ou foram protocolizadas nos Juizados Especiais, no período-base (semestre);"),
+                                                     p("Casos Novos Execução T1: Total de casos novos de execução de títulos executivos extrajudiciais, que iniciaram no 1º Grau, no período-base (semestre);"),
+                                                     p("Casos Novos Execução Judicial 1: Total de casos novos de execução judicial, que iniciaram no 1º Grau, no período-base (semestre);"),
+                                                     p("Casos Novos Execução Judicial JE: Total de  casos novos de execução de título judicial que ingressaram ou foram protocolizados nos Juizados Especiais, no período-base (semestre);"),
+                                                     p("Execuções Judiciais 1: Processos de execução de título judicial ou de cumprimento de sentença iniciados no 1º grau, no período-base (semestre);"),
+                                                     p("Execuções Judiciais JE: Processos de execução de título judicial ou cumprimento de sentença iniciados nos Juizados Especiais, exceto execuções penais, no período-base (semestre);"),
+                                                     p("Execuções PP1: Processos de execução de penas privativas de liberdade, inclusive de execuções provisórias, iniciados no 1º grau no período-base (mês);"),
+                                                     p("Execuções PNP1:  Processos de execução de penas não-privativas de liberdade iniciados no 1º grau no período-base (mês);"),
+                                                     p("Execuções PNPJE: Processos de execução de penas não-privativas de liberdade iniciados no Juizado Especial, no período-base (mês)."),br(),
+                                                     strong(p("Despesas")),
+                                                     p("Receitas:Total de Receitas;"),
+                                                     p("Despesas:Despesas liquidadas no ano-base com bens de capital;"),
+                                                     p("Despesas de Pessoal:Despesas liquidadas no ano-base com Pessoal
+                                                       e Encargos do quadro ativo e inativo de cada Tribunal;"),
+                                                     p("Despesas de Pessoal Ativo:Despesas liquidadas no ano-base com Pessoal
+                                                       e Encargos do quadro ativo de cada Tribunal;"),
+                                                     p("Despesas de Pessoal Inativo:Despesas liquidadas no ano-base com Pessoal
+                                                       e Encargos do quadro inativo de cada Tribunal;"),
+                                                     p("Despesa Total da Justiça: Total das Despesas liquidadas no ano-base 
+                                                       com Recursos Humanos, despesas correntes e de capital;"),
+                                                     p("Despesa total 2: Total das Despesas liquidadas no ano-base, exceto gastos com inativos e obras;"),
+                                                     p("Arrecadação/Despesa:Arrecadação com Custas e Emolumentos em relação à Despesa Total da Justiça;"),
+                                                     p("Despesa de Aquisição em TI e Comunicação: Despesas liquidadas no ano-base com aquisição de software
+                                                       e hardware de informática na área de TI e comunicação;"),
+                                                     p("Despesa de Custeio de TI e Comunicação: Despesas liquidadas no ano-base com serviços de
+                                                       informática, de tecnologia da informação, aquisição de software, manutenção de equipamentos e comunicação de dados;"),
+                                                     p("Despesa de Contratos de TI e Comunicação:Despesa com Contratos da Tecnologia de Informação e Comunicação da Justiça;"),
+                                                     p("Despesa com Estagiários: Despesas liquidadas no ano-base com Estagiários(bolsa, auxílios e seguros);"),
+                                                     p("Despesa com Terceirizados:: Despesas liquidadas no ano-base com a contratação de mão de obra terceirizada, exceto
+                                                       prestação de serviço de mão de obra eventual;"),
+                                                     p("Despesa com Benefícios: Despesas liquidadas no ano-base com benefícios para magistrados, servidores ativos, 
+                                                       inativos e instituidores de pensão;"),
+                                                     p("Outras Despesas com RH: Outras despesas indenizatórias e indiretas com Recursos Humanos do quadro ativo
+                                                       de cada Tribunal e suas respectivas unidades vinculadas, no ano-base;"),
+                                                     p("Cargos em Comissão: Total de cargos em comissão no quadro de pessoal de cada Tribunal e suas respectivas unidades
+                                                       vinculadas, no final do ano-base;"),
+                                                     p("Funções Comissionadas: Total de Funções Comissionadas Existentes;"),
+                                                     p("Despesa com RH: Despesa com pessoal, encargos, benefícios, terceirizados, estagiários e outras despesas indenizatórias e
+                                                       indiretas com recursos humanos de cada Tribunal e suas respectivas unidades vinculadas, no ano-base;"),
+                                                     p("Magistrados: Total de magistrados com atuação em cada Tribunal e suas respectivas unidades vinculadas, no período-base;"),
+                                                     p("Magistrados1: Total de magistrados com atuação no 1º grau, no período-base;"),
+                                                     p("Magistrados2: Total de magistrados em cada Tribunal no final período-base;"),
+                                                     p("Magistrados em JE: Total de magistrados com atuação nos Juizados Especiais, no final período-base;"),
+                                                     p("Magistrados em TR: Total de magistrados com atuação nas Turmas Recursais, no período-base;"),
+                                                     p("Cargos de Magistrado: Total de magistrado existentes, providos ou não, em cada Tribunal e suas respectivas unidades
+                                                       vinculadas, no final do período-base;"),
+                                                     p("Cargos de Magistrados1: Total de  cargos existentes de Magistrado, providos ou não, no 1º Grau da Justiça no
+                                                       final do período-base(inclusive Juízes Titulares e os Juízes Substitutos);"),
+                                                     p("Cargos de Magistrados2: Total cargos existentes de Magistrado no 2º Grau da Justiça no final do período-base,
+                                                       providos ou não. Excluem-se os Juízes Substitutos de 2º grau;"),
+                                                     p("Cargos de Magistrados em JE: Total de cargos existentes de Magistrado, providos ou não, nos Juizados Especiais exclusivos
+                                                       no final do período-base. Incluem-se os Juízes Titulares e os Juízes Substitutos;"),
+                                                     p("Servidores: Total de servidores efetivos, ocupantes apenas de cargo em comissão e os que ingressaram por cessão ou
+                                                       requisição em cada Tribunal e suas respectivas unidades vinculadas, no final do período-base"),
+                                                     p("Servidores Vagos: Total de cargos vagos de servidor;"),
+                                                     p("Conciliadores: Total de conciliadores do Tribunal e suas respectivas unidades vinculadas no final do período-base,
+                                                       independentemente na natureza da relação com o Tribunal;"),
+                                                     p("Estagiários: Total de estagiários do Tribunal e suas respectivas unidades vinculadas no final do período-base"),
+                                                     p("Juízes Leigos: Total de juízes leigos do Tribunal e suas respectivas unidades vinculadas no final do
+                                                       período –base, independentemente na natureza da relação com o Tribunal;"),
+                                                     p("Terceirizados: Total de trabalhadores contratados por empresas prestadoras de serviços (terceirizados) ao
+                                                       Tribunal e suas respectivas unidades vinculadas, no final do período-base;"),
+                                                     p("Magistrados Vagos:Número de cargos vagos de magistrado;"),br(),
+                                                     strong(p("Produtividade")),
+                                                     p("Produtividade M: Média de processos baixados por magistrado;"),
+                                                     p("Produtividade M1: Média de processos baixados por magistrado de 1º grau, no período-base (semestre);"),
+                                                     p("Produtividade M2: Média de processos baixados por magistrado de 2º grau, no período-base (semestre);"),
+                                                     p("Produtividade M: em JE:Média de processos baixados por magistrado nos Juizados Especiais, no período-base (semestre);"),
+                                                     p("Produtividade M: em TR: Média de processos baixados por magistrado de turma recursal,no período-base (semestre)"),
+                                                     p("Produtividade S: Média de processos baixados por servidor;"),
+                                                     p("Produtividade SJ: Média de processos baixados por servidor da área judiciária;"),
+                                                     p("Produtividade SJ1: Média de processos baixados por servidor da área judiciária no 1º grau, no período-base (semestre);"),
+                                                     p("Produtividade SJ2: Média de processos baixados por servidor da área judiciária no 2º grau, no período-base (semestre);"),
+                                                     p("Produtividade SJSTM: Média de processos baixados por servidor da área Judiciária no STM;"),
+                                                     p("Produtividade SJTR: Média de processos baixados por servidor da área judiciária na turma recursal, no período-base (semestre);"),
+                                                     p("Congestionamento: Taxa de Congestionamento Criminal no período-base;"),
+                                                     p("Congestionamento E1: Taxa de congestionamento na fase de execução do 1º Grau, no período-base (semestre);"),
+                                                     p("Congestionamento EJE: Taxa de congestionamento na fase de execução dos Juizados Especiais, no período-base (semestre);"),
+                                                     p("Congestionamento NC: Taxa de Congestionamento Não-Criminal no período-base;"),br(),
+                                                     strong(p("Demais Variáveis")),
+                                                     p("UF - Unidade da Federação abrangida;"),
+                                                     p("UF sede - Unidade da Federação sede;"),
+                                                     p("Tribunal - Tribunais  referentes a seus respectivos ramos de justiça;"),
+                                                     p("Justiça - Ramo de Justiça, dividida em Estadual, Federal, Superior, Trabalho, Militar Uniao;"),
+                                                     p("Ano - Ano de referência, de 2009 a 2019;"),
+                                                     p("Sigla - Sigla do Tribunal;"),
+                                                     p("Habitantes - Número de Habitantes."),
+                                                     style="width:173%;"))),
+                              tabPanel("Referencias",
                                        mainPanel(p(strong("Base de Dados:")," Justiça e Números",
                                                    a(href = "https://www.cnj.jus.br/wp-content/uploads/2020/08/25-Ago-2020.v2.zip",
                                                      target ="_blank","[link]")),br(),br(),
@@ -406,16 +411,17 @@ ui <- shinyUI(
                                  )),
                         ##############################################
                         tabPanel("Tempo de Processo",
-                                 sidebarPanel(style="width:300px;position: relative;left:0px;bottom:-70px;",
-                                              selectInput("jus3",'Justiça',choices = unique(dados$justica)),
-                                              selectInput("tribunal3","Tribunal",choices = unique(dados$sigla)),
-                                              selectInput("uf3","UF",choices =list(`Norte` = list("AC","AM","AP","TO","PA","RR","RO"),
-                                                                                   `Nordeste` = list("CE","AL","BA","MA","PA","PE",
-                                                                                                     "PI","RN","SE"),
-                                                                                   `Centro-Oeste` = list("GO","MT","MS","DF"),
-                                                                                   `Sudeste`=list("ES","MG","RJ","SP"),
-                                                                                   `Sul`=list("PR","SC","RS"))),
-                                              selectInput("ano3","Ano",choices = unique(dados$ano)))))),
+                                 mainPanel(
+                                   div(plotOutput("tp1"),
+                                       style="width:600px ;position: relative;left: 0px;bottom:-30px;"),
+                                   div(plotOutput("tp2"),
+                                       style="width:600px ;position: relative;left: 650px;bottom:360px;"),
+                                   div(plotOutput("tp3"),
+                                       style="width:600px ;position: relative;left:0px;bottom:350px;"),
+                                   div(plotOutput("tp4"),
+                                       style="width:600px ;position: relative;left:650px;bottom:760px;")
+                                 )
+                                 ))),
              #####################################################
              tabPanel("Acesso à Justiça",icon=icon("globe"),
                       tags$style(type="text/css",
@@ -470,19 +476,8 @@ server <- function(input, output,session) {
     )
   })
   #
-  observeEvent(input$jus3,{
-    updateSelectInput(session,'tribunal3',
-                      choices=unique(produtividade$sigla[produtividade$justica %in% input$jus3]))
-  })
-  
-  observeEvent(c(input$jus3, input$tribunal3),{
-    updateSelectInput(session,'uf3',
-                      choices=unique(produtividade$uf_sede[produtividade$justica %in% input$jus3 &
-                                                             produtividade$sigla %in% input$tribunal3])
-    )
-  })
-  #
-  
+ 
+ 
   ###################################################################
   
   react1=reactive({
@@ -551,7 +546,7 @@ server <- function(input, output,session) {
     d2
   })
   output$a1=renderPlot({
-    ggplot(react4(), aes(x=factor(ano)))+geom_col(aes(y=i),fill = "#00a2e8")+
+    ggplot(react4(), aes(x=factor(ano)))+geom_col(aes(y=i),fill = "#ffae00")+
       ggtitle("Arrecadação sobre a despesa total da Justiça segundo ano")+
       labs(x="Ano",y="Percentual")
   })
@@ -765,8 +760,8 @@ server <- function(input, output,session) {
       mutate_if(is.character, as.numeric)
     ggplot(c4)+geom_line(aes(x=ano,y=cnelet,colour=mycol[1]))+
       scale_x_continuous( breaks=c(2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019))+
-      labs(y="Total",x="Ano")+
-      ggtitle("Quantidade de Casos Eletrônicos segundo ano")+
+      labs(y="Quantidade",x="Ano")+
+      ggtitle("Série Histórica Casos Eletrônicos")+
       theme(legend.position = "none")
   })
   
@@ -880,7 +875,7 @@ server <- function(input, output,session) {
     a2$regiao_id[a2$regiao_id==2]="Sudeste"
     a2$regiao_id[a2$regiao_id==3]="Norte"
     a2$regiao_id[a2$regiao_id==4]="Nordeste"
-    a2$regiao_id[a2$regiao_id==5]="Centro-Oeste"
+    a2$regiao_id[a2$regiao_id==5]="Centro Oeste"
     a2=a2%>%group_by(regiao_id)%>%
       summarise(a1=round(sum(a1,na.rm =T),2),
                 a2=round(sum(a2,na.rm=T),2))
@@ -899,7 +894,38 @@ server <- function(input, output,session) {
     
     
   })
+  output$tp1=renderPlot({
+    ggplot(data = t1, aes(x=tpcpm)) + geom_histogram(fill=mycol[3], color='white')+
+      theme(legend.position="bottom")+labs(colour=" ")+
+      ggtitle("Distribuição do tempo pendente")+
+      labs(x="Tempo",y="Frequência")
+  })
+  output$tp2=renderPlot({
+    ggplot(data = t1, aes(x=tpcpm, y =' ')) + 
+      geom_violin(fill=mycol[3], color='gray', alpha=0.4) +
+      geom_boxplot(fill=mycol[3], color='black')+
+      theme(legend.position="bottom")+labs(colour=" ")+
+      ggtitle("Distribuição do tempo pendente")+
+      labs(x="Tempo",y="Frequência")
+    
+  })
+  output$tp3=renderPlot({
+    ggplot(data = t2, aes(x=tpsentc1jem)) + geom_histogram(fill=mycol[3], color='white')+
+      theme(legend.position="bottom")+labs(colour=" ")+
+      ggtitle("Distribuição do tempo de sentença em primeiro grau")+
+      labs(x="Tempo",y="Frequência")
+  })
+  
+  output$tp4=renderPlot({
+    ggplot(data = t2, aes(x=tpsentc1jem, y =' ')) + 
+      geom_violin(fill=mycol[3], color='gray', alpha=0.4) +
+      geom_boxplot(fill=mycol[3], color='black')+
+      theme(legend.position="bottom")+labs(colour=" ")+
+      ggtitle("Distribuição do tempo de sentença em primeiro grau")+
+      labs(x="Tempo",y="Frequência")
+    
+  })
+  
 }
 
 shinyApp(ui, server)
-

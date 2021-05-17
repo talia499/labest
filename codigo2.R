@@ -157,10 +157,10 @@ ui <- shinyUI(
                                                                                        de Justiça e Números, do Conselho Nacional de Justiça,  
                                                                                        e são correspondentes ao período de 2009 a 2019. As variáveis
                                                                                        utilizadas estão descritas a seguir."),br(),
-                                                     strong(p("Assistência")),br(),
+                                                     strong(p("Assistência")),
                                                      p("Assistência: Assistência Judiciária Gratuita;"),
                                                      p("Assistência/despesa: Assistência Judiciária Gratuita em relação à Despesa Total da Justiça;"),
-                                                     p("Assistência/habitantes: Assistência Judiciária Gratuita por 100.000 habitantes (R$)."),
+                                                     p("Assistência/habitantes: Assistência Judiciária Gratuita por 100.000 habitantes (R$)."),br(),
                                                      strong(p("Casos")),
                                                      p("Casos Novos: Processos protocolizados e interpostos para julgamento no período-base;"),
                                                      p("Processos Baixados: Total de processos baixados no período-base;"),

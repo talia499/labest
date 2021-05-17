@@ -1,3 +1,51 @@
+library(readr)
+library(shiny)
+library(ggplot2)
+library(dplyr)
+library(tidyverse)
+library(ggrepel)
+library(shinydashboard)
+library(plotly)
+library(geojsonio)
+library(leaflet)
+library(shinydashboardPlus)
+mycol<- c( "#D94800","#458A00", "#8A8A00", "#005C8A","#CC0074","darkcyan")
+states <- geojson_read("https://raw.githubusercontent.com/codeforamerica/click_that_hood/master/public/data/brazil-states.geojson",  what = "sp")
+dados<- read.csv2("JN_25-Ago-2020.csv", header=T)
+tpcpm <- dados$tpcpm[dados$tpcpm != 'nd']
+tpcpm <- str_replace_all(string = tpcpm, pattern = ',', replacement = '.')
+tpcpm <- as.numeric(tpcpm)
+t1 <- data.frame(tpcpm = tpcpm)
+tpsentc1jem <- dados$tpsentc1jem[dados$tpsentc1jem != 'nd']
+tpsentc1jem <- str_replace_all(string = tpsentc1jem, pattern = ',', replacement = '.')
+tpsentc1jem <- as.numeric(tpsentc1jem)
+t2 <- data.frame(tpsentc1jem = tpsentc1jem)
+despesas=dados[,c('uf_abrangida','uf_sede','dsc_tribunal',"justica",'ano',"sigla","h1","receitas",
+                  'dk','dpe','dpea','dpei','dpj','dpjio','i','dinf1','dinf2','dinf3',"dpe",'dest',
+                  'dter','dben','dip',"cc","tfc",'drh',"mag","mag1",'mag2','magje','magtr',"mage",
+                  'mage1','mage2','mageje','magtr','ts','tvefet','tfauxc', 'tfauxe',
+                  'tfauxjl', 'tfauxt',"magv")]
+
+casos=dados[,c("justica","ano",'uf_abrangida','uf_sede',"sigla","h1",'cn','tbaix',
+               'cnncrim','cnelet','cncrim','sent1','dec2','cnncrim',
+               'cnccrim1','cnccrimje','cncrim2','cncrimtr',
+               'cncncrim1','cncncrimje','cnncrim2','cnncrimtr',
+               'cnex1','cnexje',
+               'cnextfisc1',
+               'cnextje','cnext1',
+               'exejud1','exejudje',
+               'exejudncrim1','exejudncrimje','exejudcrimpl1','exejudcrimnpl1','exejudcrimnplje')]
+
+
+produtividade=dados[,c('uf_abrangida','uf_sede','dsc_tribunal',"justica",'ano',"sigla","h1",
+                       'ipm','ipm1','ipm2','ipmje','ipmtr',"ips",
+                       'ipsjud','ipsjud1','ipsjud2','ipsjudstm','ipsjudtr',
+                       'tccrim','tcex1','tcexje','tcncrim',
+                       'tccrim','tcncrim','tcex1','tcexje')]
+assistencia=dados[,c('uf_abrangida','uf_sede','dsc_tribunal',"justica",'ano',"sigla",
+                     'jg','a1','a2')]
+##########################################################################################3
+
 ui <- shinyUI(
   navbarPage("CNJ",tabPanel("Home",icon = icon("home", lib =  "glyphicon"),
                             tags$style(HTML("
@@ -895,7 +943,7 @@ server <- function(input, output,session) {
     
   })
 }
-  
+
 
 
 shinyApp(ui, server)

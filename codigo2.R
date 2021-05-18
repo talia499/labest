@@ -9,17 +9,10 @@ library(plotly)
 library(geojsonio)
 library(leaflet)
 library(shinydashboardPlus)
+library(DT)
 mycol<- c( "#D94800","#458A00", "#8A8A00", "#005C8A","#CC0074","darkcyan")
 states <- geojson_read("https://raw.githubusercontent.com/codeforamerica/click_that_hood/master/public/data/brazil-states.geojson",  what = "sp")
 dados<- read.csv2("JN_25-Ago-2020.csv", header=T)
-tpcpm <- dados$tpcpm[dados$tpcpm != 'nd']
-tpcpm <- str_replace_all(string = tpcpm, pattern = ',', replacement = '.')
-tpcpm <- as.numeric(tpcpm)
-t1 <- data.frame(tpcpm = tpcpm)
-tpsentc1jem <- dados$tpsentc1jem[dados$tpsentc1jem != 'nd']
-tpsentc1jem <- str_replace_all(string = tpsentc1jem, pattern = ',', replacement = '.')
-tpsentc1jem <- as.numeric(tpsentc1jem)
-t2 <- data.frame(tpsentc1jem = tpsentc1jem)
 despesas=dados[,c('uf_abrangida','uf_sede','dsc_tribunal',"justica",'ano',"sigla","h1","receitas",
                   'dk','dpe','dpea','dpei','dpj','dpjio','i','dinf1','dinf2','dinf3',"dpe",'dest',
                   'dter','dben','dip',"cc","tfc",'drh',"mag","mag1",'mag2','magje','magtr',"mage",
@@ -308,6 +301,7 @@ ui <- shinyUI(
                                     div(img(src="https://cnj.jus.br/cnj15anos/images/marca-cnj-preta.png",width="140px"),
                                         style="position:relative; left:110px;bottom:70px;")))
                                                      ),
+       
              #######################################################################           
              tabPanel("Insumos",icon=icon("coins"),tags$style(type="text/css",
                                                               ".shiny-output-error { visibility: hidden; }",
@@ -322,7 +316,8 @@ ui <- shinyUI(
                                                             'Sudeste'=list("ES","MG","RJ","SP"),
                                                             'Sul'=list("PR","SC","RS"))
                         ),
-                        selectInput("ano","Ano","2019",choices = unique(dados$ano))
+                        selectInput("ano","Ano",choices = unique(dados$ano),
+                                    selected = "2019")
                         
                       ),
                       #################################
@@ -374,7 +369,8 @@ ui <- shinyUI(
                                                              `Centro-Oeste` = list("GO","MT","MS","DF"),
                                                              `Sudeste`=list("ES","MG","RJ","SP"),
                                                              `Sul`=list("PR","SC","RS"))),
-                        selectInput("ano1","Ano","2019",choices = unique(dados$ano))
+                        selectInput("ano1","Ano",choices = unique(dados$ano),
+                                    selected = "2019")
                         
                       ),mainPanel(
                         div(plotOutput("l1"),
@@ -403,7 +399,8 @@ ui <- shinyUI(
                                                                                    `Centro-Oeste` = list("GO","MT","MS","DF"),
                                                                                    `Sudeste`=list("ES","MG","RJ","SP"),
                                                                                    `Sul`=list("PR","SC","RS"))),
-                                              selectInput("ano2","Ano","2019",choices = unique(dados$ano))),
+                                              selectInput("ano2","Ano",choices = unique(dados$ano),selected = "2019")),
+                                              
                                  mainPanel(div(plotOutput("i2"),
                                                style="width:700px;position: relative;left:-130px;bottom:-50px;"),
                                            div(plotlyOutput('i1'),
@@ -412,7 +409,8 @@ ui <- shinyUI(
                         ##############################################
                         tabPanel("Tempo de Processo",
                                  inputPanel(
-                                   selectInput("ano3","Ano","2019",choices=c("2015","2016","2017","2018","2019"))
+                                   selectInput("ano3","Ano",choices=c("2015","2016","2017","2018","2019"),
+                                               selected = "2019")
                                    
                                  ),
                                  mainPanel(
@@ -437,12 +435,13 @@ ui <- shinyUI(
                                     style="position: relative;left:0px;bottom:-70px;"),
                         div(leafletOutput("aj1"),
                             style="width:500px;position: relative;left:0px;bottom:-70px;"),
-                        div(plotlyOutput("aj2"),
-                            style="width:750px;position: relative;left:500px;bottom:350px;"))
+                        div(DTOutput("aj2"),
+                            style="width:650px;position: relative;left:600px;bottom:330px;"))
              )
              
                                                      )
                             )
+
 ########################################
 server <- function(input, output,session) {
   observeEvent(input$jus,{
@@ -864,7 +863,7 @@ server <- function(input, output,session) {
       addMeasure(position = "bottomleft")
     
   })
-  output$aj2=renderPlotly({
+  output$aj2=renderDT({
     a2=assistencia%>%filter(ano %in% input$ano4)%>%
       select(a1,a2,uf_sede)%>%
       mutate(a1=as.numeric(gsub(",",".",a1)),
@@ -888,15 +887,18 @@ server <- function(input, output,session) {
                    "Assistência Judiciária Gratuita por 100.000 habitantes")
     
     
-    plot_ly(type="table",
-            header=list(values=names(a2),  align = c('center', rep('center', ncol(a2))),
-                        line = list(width = 1, color = 'black'),
-                        fill = list(color = "darkblue"),
-                        font = list(family = "Arial", size = 14, color = "white")),
-            cells=list(values=unname(a2),
-                       font = list(family = "Arial", size = 14, color = c("white","black")),
-                       fill = list(color = c("darkblue", '#B0C4DE')))) 
-    
+    datatable(a2,
+              rownames = FALSE, 
+              options = list(pageLength = 6,dom = 't',
+                             initComplete = JS(
+                               "function(settings, json) {",
+                               "$(this.api().table().header()).css({'background-color': 'darkblue', 'color':'white'});",
+                               "}")
+                             
+              ))%>%
+      formatStyle(columns = "Região", target = "cell", backgroundColor = "#B0C4DE")%>%
+      formatStyle(columns = "Assistência Judiciária Gratuita em relação à Despesa Total da Justiça", target = "cell", backgroundColor = "#B0C4DE")%>%
+      formatStyle(columns = "Assistência Judiciária Gratuita por 100.000 habitantes", target = "cell", backgroundColor = "#B0C4DE")
     
   })
   output$tp1=renderPlot({

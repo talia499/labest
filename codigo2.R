@@ -41,6 +41,7 @@ assistencia=dados[,c('uf_abrangida','uf_sede','dsc_tribunal',"justica",'ano',"si
 
 ui <- shinyUI(
   navbarPage("CNJ",tabPanel("Home",icon = icon("home", lib =  "glyphicon"),
+                            tags$head(tags$style("body{background-color:#c0c0c0;}")),
                             tags$style(HTML("
                                             .navbar { background-color: #002f54;} 
                                             .navbar-default .navbar-nav > li > a {color:white; }
@@ -110,31 +111,32 @@ ui <- shinyUI(
                             div(navlistPanel(
                               "Descrição",
                               tabPanel("Introdução",
-                                       mainPanel("O judiciário é um dos três poderes do Estado, ele 
-                                                 tem como principal função julgar e aplicar leis no 
-                                                 país. O sistema judiciário é considerado lento por 
-                                                 grande parte da população e um dos motivos para isso 
-                                                 é que ele não consegue atender às demandas da justiça 
-                                                 dentro do ritmo necessário, ou seja, os números de 
-                                                 processos são muito maiores do que os magistrados e 
-                                                 servidores conseguem finalizar, mesmo que os processos 
-                                                 pendentes na Justiça estejam em queda, de acordo com
-                                                 Relatório Justiça em Números 2019 da CNJ. Segundo o 
-                                                 Diário Oficial da União de 2017,'mesmo que o Poder 
-                                                 Judiciário fosse paralisado sem ingresso de novas 
-                                                 demandas, com a atual produtividade de magistrados
-                                                 e servidores, seriam necessários aproximadamente 3 
-                                                 anos de trabalho para zerar o estoque', essa afirmação 
-                                                 é preocupante pois, agrava a sensação de ineficiência 
-                                                 do Poder Judiciário, nesse sentido, objetiva-se desenvolver
-                                                 uma plataforma que permita analisar a produtividade de 
-                                                 componentes desse setor. ",
-                                                 style="width:173%;")),
-                              tabPanel("Objetivos",
-                                       mainPanel(strong(p("Este é um projeto da equipe de Justiça e Números da 
+                                      mainPanel(strong(p("Este é um projeto da equipe de Justiça e Números da 
                                                           disciplina Laboratório em Estatística, do Departamento 
                                                           de Estatística da Universidade de Brasília (UnB) com 
-                                                          o Conselho Nacional de Justiça (CNJ) com os objetivos:")),br(),
+                                                          o Conselho Nacional de Justiça (CNJ).")),br(),
+                                                        p("O judiciário é um dos três poderes do Estado, ele 
+                                                         tem como principal função julgar e aplicar leis no 
+                                                         país. O sistema judiciário é considerado lento por 
+                                                         grande parte da população e um dos motivos para isso 
+                                                         é que ele não consegue atender às demandas da justiça 
+                                                         dentro do ritmo necessário, ou seja, os números de 
+                                                         processos são muito maiores do que os magistrados e 
+                                                         servidores conseguem finalizar, mesmo que os processos 
+                                                         pendentes na Justiça estejam em queda, de acordo com
+                                                         Relatório Justiça em Números 2019 da CNJ. Segundo o 
+                                                         Diário Oficial da União de 2017,'mesmo que o Poder 
+                                                         Judiciário fosse paralisado sem ingresso de novas 
+                                                         demandas, com a atual produtividade de magistrados
+                                                         e servidores, seriam necessários aproximadamente 3 
+                                                         anos de trabalho para zerar o estoque', essa afirmação 
+                                                         é preocupante pois, agrava a sensação de ineficiência 
+                                                         do Poder Judiciário, nesse sentido, objetiva-se desenvolver
+                                                         uma plataforma que permita analisar a produtividade de 
+                                                         componentes desse setor. "),
+                                                        style="width:173%;background-color:#778899;")),
+                              tabPanel("Objetivos",
+                                       mainPanel(strong(p("Este trabalho tem os seguintes objetivos:")),
                                                  p("Tornar o acesso aos dados do módulo de Produtividade Mensal do 
                                                    CNJ mais acessível, criando novos mecanismos de disponibilização 
                                                    dos dados e consequentemente comparação e avaliação da produtividade 

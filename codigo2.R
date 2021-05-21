@@ -111,30 +111,30 @@ ui <- shinyUI(
                             div(navlistPanel(
                               "Descrição",
                               tabPanel("Introdução",
-                                      mainPanel(strong(p("Este é um projeto da equipe de Justiça e Números da 
+                                       mainPanel(strong(p("Este é um projeto da equipe de Justiça e Números da 
                                                           disciplina Laboratório em Estatística, do Departamento 
                                                           de Estatística da Universidade de Brasília (UnB) com 
                                                           o Conselho Nacional de Justiça (CNJ).")),br(),
-                                                        p("O judiciário é um dos três poderes do Estado, ele 
-                                                         tem como principal função julgar e aplicar leis no 
-                                                         país. O sistema judiciário é considerado lento por 
-                                                         grande parte da população e um dos motivos para isso 
-                                                         é que ele não consegue atender às demandas da justiça 
-                                                         dentro do ritmo necessário, ou seja, os números de 
-                                                         processos são muito maiores do que os magistrados e 
-                                                         servidores conseguem finalizar, mesmo que os processos 
-                                                         pendentes na Justiça estejam em queda, de acordo com
-                                                         Relatório Justiça em Números 2019 da CNJ. Segundo o 
-                                                         Diário Oficial da União de 2017,'mesmo que o Poder 
-                                                         Judiciário fosse paralisado sem ingresso de novas 
-                                                         demandas, com a atual produtividade de magistrados
-                                                         e servidores, seriam necessários aproximadamente 3 
-                                                         anos de trabalho para zerar o estoque', essa afirmação 
-                                                         é preocupante pois, agrava a sensação de ineficiência 
-                                                         do Poder Judiciário, nesse sentido, objetiva-se desenvolver
-                                                         uma plataforma que permita analisar a produtividade de 
-                                                         componentes desse setor. "),
-                                                        style="width:173%;background-color:#778899;")),
+                                                 p("O judiciário é um dos três poderes do Estado, ele 
+                                                   tem como principal função julgar e aplicar leis no 
+                                                   país. O sistema judiciário é considerado lento por 
+                                                   grande parte da população e um dos motivos para isso 
+                                                   é que ele não consegue atender às demandas da justiça 
+                                                   dentro do ritmo necessário, ou seja, os números de 
+                                                   processos são muito maiores do que os magistrados e 
+                                                   servidores conseguem finalizar, mesmo que os processos 
+                                                   pendentes na Justiça estejam em queda, de acordo com
+                                                   Relatório Justiça em Números 2019 da CNJ. Segundo o 
+                                                   Diário Oficial da União de 2017,'mesmo que o Poder 
+                                                   Judiciário fosse paralisado sem ingresso de novas 
+                                                   demandas, com a atual produtividade de magistrados
+                                                   e servidores, seriam necessários aproximadamente 3 
+                                                   anos de trabalho para zerar o estoque', essa afirmação 
+                                                   é preocupante pois, agrava a sensação de ineficiência 
+                                                   do Poder Judiciário, nesse sentido, objetiva-se desenvolver
+                                                   uma plataforma que permita analisar a produtividade de 
+                                                   componentes desse setor. "),
+                                                 style="width:173%;background-color:#c0c0c0;")),
                               tabPanel("Objetivos",
                                        mainPanel(strong(p("Este trabalho tem os seguintes objetivos:")),
                                                  p("Tornar o acesso aos dados do módulo de Produtividade Mensal do 
@@ -147,7 +147,7 @@ ui <- shinyUI(
                               "Informação",
                               tabPanel("Variáveis",
                                        div(style="overflow-y:scroll; max-height: 400px;width:720px;",
-                                           wellPanel(style="background-color:white;border:none;
+                                           wellPanel(style="background-color:#c0c0c0;border:none;
                                                      .row-fluid .span4{width: 26%;}",p("Para este trabalho, os dados foram extraídos do módulo
                                                                                        de Justiça e Números, do Conselho Nacional de Justiça,  
                                                                                        e são correspondentes ao período de 2009 a 2019. As variáveis
@@ -303,7 +303,7 @@ ui <- shinyUI(
                                     div(img(src="https://cnj.jus.br/cnj15anos/images/marca-cnj-preta.png",width="140px"),
                                         style="position:relative; left:110px;bottom:70px;")))
                                                      ),
-       
+             
              #######################################################################           
              tabPanel("Insumos",icon=icon("coins"),tags$style(type="text/css",
                                                               ".shiny-output-error { visibility: hidden; }",
@@ -402,11 +402,11 @@ ui <- shinyUI(
                                                                                    `Sudeste`=list("ES","MG","RJ","SP"),
                                                                                    `Sul`=list("PR","SC","RS"))),
                                               selectInput("ano2","Ano",choices = unique(dados$ano),selected = "2019")),
-                                              
+                                 
                                  mainPanel(div(plotOutput("i2"),
                                                style="width:700px;position: relative;left:-130px;bottom:-50px;"),
-                                           div(plotlyOutput('i1'),
-                                               style="width:700px;position: relative;left:-130px;bottom:-50px;")
+                                           div(DTOutput('i1'),
+                                               style="width:700px;padding:35px;position: relative;left:-130px;bottom:-50px;")
                                  )),
                         ##############################################
                         tabPanel("Tempo de Processo",
@@ -435,14 +435,15 @@ ui <- shinyUI(
                         selectInput("ano4","Ano",choices = unique(dados$ano))),
                       mainPanel(div(h4("Assistência Gratuita"),
                                     style="position: relative;left:0px;bottom:-70px;"),
-                        div(leafletOutput("aj1"),
-                            style="width:500px;position: relative;left:0px;bottom:-70px;"),
-                        div(DTOutput("aj2"),
-                            style="width:650px;position: relative;left:600px;bottom:330px;"))
+                                div(leafletOutput("aj1"),
+                                    style="width:500px;position: relative;left:0px;bottom:-70px;"),
+                                div(DTOutput("aj2"),
+                                    style="width:650px;position: relative;left:600px;bottom:330px;"))
              )
              
                                                      )
                             )
+
 
 ########################################
 server <- function(input, output,session) {
@@ -780,7 +781,7 @@ server <- function(input, output,session) {
       select(ipm,ipm1,ipm2,ipmje,ipmtr,ips,ipsjud,ipsjud1,ipsjud2,ipsjudtr)%>%
       mutate_all(funs(gsub(",", ".", .) ))%>%
       mutate_all(funs(round(as.numeric(.),2)))
-    p1=rownames_to_column(data.frame("produtividade"=t(p1)), "Produtividade")
+    p1=rownames_to_column(data.frame("Indice"=t(p1)), "Produtividade")
     p1$Produtividade[p1$Produtividade=="ipm"]="Magistrados"
     p1$Produtividade[p1$Produtividade=="ipm1"]="Magistrados 1º grau"
     p1$Produtividade[p1$Produtividade=="ipm2"]="Magistrados 2º grau"
@@ -793,16 +794,20 @@ server <- function(input, output,session) {
     p1$Produtividade[p1$Produtividade=="ipsjudtr"]="Servidores Área Judiciária Turmas Recursais"
     p1
   })
-  output$i1=renderPlotly({
+  output$i1=renderDT({
     
-    plot_ly(type="table",
-            header=list(values=names(react13()),  align = c('center', rep('center', ncol(react13()))),
-                        line = list(width = 1, color = 'black'),
-                        fill = list(color = "darkblue"),
-                        font = list(family = "Arial", size = 14, color = "white")),
-            cells=list(values=unname(react13()),
-                       font = list(family = "Arial", size = 14, color = c("white","black")),
-                       fill = list(color = c("darkblue", '#B0C4DE')))) 
+    datatable(react13(),
+              rownames = FALSE, 
+              options = list(pageLength = 5,
+                             initComplete = JS(
+                               "function(settings, json) {",
+                               "$(this.api().table().header()).css({'background-color': 'darkblue', 'color':'white'});",
+                               "}")
+                             
+              ))%>%
+      
+      formatStyle(columns = "Produtividade", target = "cell", backgroundColor = "#B0C4DE")%>%
+      formatStyle(columns = "Indice", target = "cell", backgroundColor = "#B0C4DE")
   })
   output$i2=renderPlot({
     p2=produtividade%>%
@@ -948,7 +953,5 @@ server <- function(input, output,session) {
     
   })
 }
-
-
 
 shinyApp(ui, server)
